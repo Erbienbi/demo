@@ -1,12 +1,6 @@
 'use strict';
-const {hashPassword} = require('../helpers/bcryptjs.js')
-
 module.exports = (sequelize, DataTypes) => {
-
-  const Model = sequelize.Sequelize.Model
-  class User extends Model {}
-
-  User.init({
+  const Owner = sequelize.define('Owner', {
     name: {
       type: DataTypes.STRING,
       validate: {
@@ -46,37 +40,25 @@ module.exports = (sequelize, DataTypes) => {
         },
       }
     },
-    role: {
+    phone: {
       type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          msg: 'Please insert phone number'
+        }
+      }
     },
-    RoomId: {
-      type: DataTypes.INTEGER
-    },
-    KTP: {
+    ktp: {
       type: DataTypes.STRING,
       validate: {
         notEmpty: {
           msg: 'Please insert KTP number'
         }
       }
-    },
-  }, {
-    hooks: {
-      beforeCreate: (instance, options) => {
-        let inputPass = instance.password
-        instance.password = hashPassword(inputPass)
-        if (!instance.role) {
-          instance.role = 'user'
-        }
-      }
-    },
-    sequelize,
-    timestamps: false,
-  })
-
-  User.associate = function (models) {
+    }
+  }, {});
+  Owner.associate = function(models) {
     // associations can be defined here
-    // User.hasOne(models.Room)
   };
-  return User;
+  return Owner;
 };
