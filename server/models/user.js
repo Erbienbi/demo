@@ -57,6 +57,9 @@ module.exports = (sequelize, DataTypes) => {
       beforeCreate: (instance, options) => {
         let inputPass = instance.password
         instance.password = hashPassword(inputPass)
+        if (!instance.role) {
+          instance.role = 'user'
+        }
       }
     },
     sequelize,
