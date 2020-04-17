@@ -4,8 +4,8 @@ const {generateToken} = require('../helpers/jsonwebtoken.js')
 
 class OwnerController {
     static register(req, res, next) {
-        const { name, email, password} = req.body
-        Owner.create({ name, email, password})
+        const { name, email, password, phone ,KTP } = req.body
+        Owner.create({ name, email, password, phone, KTP})
         .then(data => {
             res.status(201).json({ data, message: 'Successfully registered new Owner' })
         })
@@ -39,7 +39,7 @@ class OwnerController {
                 role: owner.role,
             }
             let token = generateToken(ownerProfile)
-            res.status(200).json({ token, owner: {id: owner.id, name: owner.name, role:owner.role}, message: 'Log in successful' })
+            res.status(200).json({ token, owner: {id: owner.id, name: owner.name}, message: 'Log in successful' })
         })
         .catch(next)
     }
@@ -67,7 +67,7 @@ class OwnerController {
             if (data) {
                 res.status(200).json(data)
             } else {
-                throw {status: 400, message: `something's wrong`}
+                throw {status: 400, message: `oops... something's wrong`}
             }
         })
         .catch(next)
