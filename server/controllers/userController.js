@@ -40,15 +40,12 @@ class Controller {
                 role: user.role,
             }
             let token = generateToken(userProfile)
-            console.log('Token:', token)
-            res.status(200).json({ token, userProfile, message: 'Log in successful' })
+            res.status(200).json({ token, user: {id: user.id, name: user.name, email: user.email}, message: 'Log in successful' })
         })
         .catch(next)
     }
 
     static getProfile(req, res, next) {
-        console.log('Get profile with ID:')
-        console.log(req.userData.id)
         User.findOne({ where: { id: req.userData.id }})
         .then((data) => {
             if (data) {
