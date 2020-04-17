@@ -27,9 +27,28 @@ const schema = gql`
         gender: String
     }
 
+    type Message {
+        message: String!
+    }
+
     extend type Query {
         getAllBuilding: [Building]
         getOneBuilding(id:Int): Building
+    }
+
+    extend type Mutation {
+        postBuilding(
+            token: String!
+            OwnerId:Int!
+            area: String!
+            address: String!
+            coordinate: String!
+        ) : Message
+
+        deleteBuilding(
+            token: String!
+            id: Int!
+        ): Message
     }
 
 
@@ -49,8 +68,43 @@ const resolver = {
         },
         getOneBuilding: async(_,args) => {
             const { data } = await axios.get(`${ERBIENBI_SERVER}/building/${args.id}`)
-            console.log(data)
             return data
+        }
+    },
+
+    Mutation: {
+        postBuilding: async (_, args) => {
+            const { OwnerId, area, coordinate, address, token } = args
+            const newBuilding = {
+                OwnerId,
+                area,
+                coordinate,
+                address
+            }
+
+            const { data } = await axios({
+                method: 'POST',
+                url: `${ERBIENBI_SERVER}/building`,
+                headers: {token},
+                data: newBuilding
+            })
+            await redis.del('Buildings')
+            const getAllBuilding = await axios.get(`${ERBIENBI_SERVER}/building`)
+            await redis.set('Buildings', JSON.stringify(getAllBuilding.data))
+            return {message:data}
+        },
+
+        deleteBuilding: async (_, args) => {
+            const { id, token } = args
+            const { data } = await axios({
+                method:'DELETE',
+                url: `${ERBIENBI_SERVER}/building/${id}`,
+                headers: {token}
+            })
+            await redis.del('Buildings')
+            const getAllBuilding = await axios.get(`${ERBIENBI_SERVER}/building`)
+            await redis.set('Buildings', JSON.stringify(getAllBuilding.data))
+            return {message:data}
         }
     }
 }
