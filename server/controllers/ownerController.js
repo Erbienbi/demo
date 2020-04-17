@@ -4,7 +4,7 @@ const {generateToken} = require('../helpers/jsonwebtoken.js')
 
 class OwnerController {
     static register(req, res, next) {
-        const { name, email, password, phone ,KTP } = req.body
+        const { name, email, password, phone, KTP } = req.body
         Owner.create({ name, email, password, phone, KTP})
         .then(data => {
             res.status(201).json({ data, message: 'Successfully registered new Owner' })
