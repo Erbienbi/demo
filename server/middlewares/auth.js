@@ -26,16 +26,16 @@ function authorization(req, res, next) {
 }
 
 function adminAuth(req, res, next) {
-    // try {
-    //     if (req.userData.role == 'admin') {
-    //         next()
-    //     } else {
-    //         next({ status: 401, message: 'Only admin is allowed!' })
-    //     }
-    // }
-    // catch(err) {
-    //     next({ status: 401, message: err })
-    // }
+    try {
+        if (req.userData.role == 'admin') {
+            next()
+        } else {
+            next({ status: 401, message: 'Only admin is allowed!' })
+        }
+    }
+    catch(err) {
+        next({ status: 401, message: err })
+    }
 }
 
 function customerAuth(req, res, next) {
