@@ -9,7 +9,6 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    OwnerId: DataTypes.INTEGER,
     UserId: DataTypes.INTEGER,
     BuildingId: DataTypes.INTEGER,
     ac: DataTypes.BOOLEAN,
