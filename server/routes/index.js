@@ -6,7 +6,7 @@ const { authentication } = require('../middlewares/auth.js')
 const userRoutes = require('./userRoutes.js')
 const ownerRoutes = require('./ownerRoutes.js')
 // const roomRoutes = require('./roomRoutes.js')
-// const buildingRoutes = require('./buildingRoutes.js')
+const buildingRoutes = require('./buildingRoutes')
 
 router.get('/', function(req,res,next) {
     res.status(200).json({
@@ -17,9 +17,9 @@ router.get('/', function(req,res,next) {
 router.use('/user', userRoutes)
 router.use('/owner', ownerRoutes)
 // router.use('/items', itemRoutes)
+router.use('/building', buildingRoutes)
 
 router.use(authentication)
 // Anything that uses authentication goes here
-// router.use('/building', buildingRoutes)
 
 module.exports = router

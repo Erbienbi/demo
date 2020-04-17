@@ -2,7 +2,7 @@
 module.exports = (sequelize, DataTypes) => {
   const Building = sequelize.define('Building', {
     OwnerId: DataTypes.INTEGER,
-    Area: {
+    area: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    Address: {
+    address: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    Coordinate: {
+    coordinate: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
@@ -32,6 +32,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Building.associate = function(models) {
     // associations can be defined here
+    Building.hasMany(models.Room, { foreignKey: 'BuildingId' })
   };
   return Building;
 };
