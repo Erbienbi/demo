@@ -31,13 +31,23 @@ class BuldingController {
     }
 
     static async getOneBuilding (req, res, next) {
+        console.log('MASOOOOk')
         const { id } = req.params
-        console.log('masuk')
         try {
             const building = await Building.findAll({where:{ id }, include:[Room]})
             res.status(200).json(building)
         } catch (err) {
             console.log(err)
+            next(err)
+        }
+    }
+
+    static async deleteBuilding (req, res, next) {
+        const { id } = req.params
+        try {
+            const deleting = await Building.destroy({where: { id }})
+            res.status(200).json('delete successfull')
+        } catch (err) {
             next(err)
         }
     }
