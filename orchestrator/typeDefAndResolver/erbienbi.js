@@ -31,9 +31,33 @@ const schema = gql`
         message: String!
     }
 
+    type loginFeedback {
+        token: String!
+        user: userInfo!
+    }
+
+    type userInfo {
+        id: Int!
+        name: String!
+        email: String!
+    }
+
+    type userProfile {
+        name: String!
+        email: String!
+        phone: String
+        KTP: String
+        role: String
+        RoomId: Int
+    }
+
+
+
+
     extend type Query {
         getAllBuilding: [Building]
         getOneBuilding(id:Int): Building
+        getOneUser(token:String): userProfile
     }
 
     extend type Mutation {
@@ -49,6 +73,17 @@ const schema = gql`
             token: String!
             id: Int!
         ): Message
+
+        userLogin(
+            email: String!
+            password: String!
+        ) : loginFeedback
+
+        userRegister(
+            name: String!
+            email: String!
+            password: String!
+        ) : Message
     }
 
 
@@ -69,10 +104,22 @@ const resolver = {
         getOneBuilding: async(_,args) => {
             const { data } = await axios.get(`${ERBIENBI_SERVER}/building/${args.id}`)
             return data
+        },
+
+        //get specific user based on the ID got from the token
+        getOneUser: async (_, args) => {
+            const { token } = args
+            const { data } = await axios({
+                method:'GET',
+                url: `${ERBIENBI_SERVER}/user`,
+                headers: { token }
+            })
+            return data
         }
     },
 
     Mutation: {
+        //posting new building (go through authentication as need token as the headers)
         postBuilding: async (_, args) => {
             const { OwnerId, area, coordinate, address, token } = args
             const newBuilding = {
@@ -94,6 +141,7 @@ const resolver = {
             return {message:data}
         },
 
+        //deleteing building, need authentication as only the owner of the building can delete the building
         deleteBuilding: async (_, args) => {
             const { id, token } = args
             const { data } = await axios({
@@ -104,6 +152,28 @@ const resolver = {
             await redis.del('Buildings')
             const getAllBuilding = await axios.get(`${ERBIENBI_SERVER}/building`)
             await redis.set('Buildings', JSON.stringify(getAllBuilding.data))
+            return {message:data}
+        },
+
+        // handling user login
+        userLogin: async (_, args) => {
+            const { email, password } = args
+            const { data } = await axios({
+                method:'POST',
+                url:`${ERBIENBI_SERVER}/user/login`,
+                data: { email, password }
+            })
+            return data
+        },
+
+        //handling user register
+        userRegister: async (_, args) => {
+            const { name, email, password } = args
+            const { data } = await axios({
+                method:'POST',
+                url:`${ERBIENBI_SERVER}/user/register`,
+                data: { name, email, password }
+            })
             return {message:data}
         }
     }
