@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
   const Owner = sequelize.define('Owner', {
     name: {
       type: DataTypes.STRING,
+      allowNull: false,
       validate: {
         notEmpty: {
           msg: 'Please insert a name!'
@@ -20,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     email: {
       type: DataTypes.STRING,
+      allowNull: false,
       validate: {
         notEmpty: {
           msg: 'Please insert an email address!'
@@ -31,6 +33,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     password: {
       type: DataTypes.STRING,
+      allowNull: false,
       validate: {
         notEmpty: {
           msg: 'Please insert a password'
@@ -45,6 +48,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     phone: {
       type: DataTypes.STRING,
+      allowNull: false,
       validate: {
         notEmpty: {
           msg: 'Please insert phone number'
@@ -53,6 +57,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     ktp: {
       type: DataTypes.STRING,
+      allowNull: false,
       validate: {
         notEmpty: {
           msg: 'Please insert KTP number'
