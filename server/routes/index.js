@@ -4,6 +4,7 @@ const router  = express.Router()
 const { authentication } = require('../middlewares/auth.js')
 
 const userRoutes = require('./userRoutes.js')
+const ownerRoutes = require('./ownerRoutes.js')
 // const roomRoutes = require('./roomRoutes.js')
 // const buildingRoutes = require('./buildingRoutes.js')
 
@@ -14,6 +15,7 @@ router.get('/', function(req,res,next) {
 })
 
 router.use('/user', userRoutes)
+router.use('/owner', ownerRoutes)
 // router.use('/items', itemRoutes)
 
 router.use(authentication)
