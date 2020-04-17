@@ -31,10 +31,10 @@ class BuldingController {
     }
 
     static async getOneBuilding (req, res, next) {
-        console.log('MASOOOOk')
+        console.log('MEMEK')
         const { id } = req.params
         try {
-            const building = await Building.findAll({where:{ id }, include:[Room]})
+            const building = await Building.findOne({where:{ id }, include:[Room]})
             res.status(200).json(building)
         } catch (err) {
             console.log(err)
@@ -46,7 +46,10 @@ class BuldingController {
         const { id } = req.params
         try {
             const deleting = await Building.destroy({where: { id }})
-            res.status(200).json('delete successfull')
+            if (deleting == 1) {
+                res.status(200).json('delete successfull')
+            }
+            next({status:400, message:'Something wrong!'})
         } catch (err) {
             next(err)
         }
