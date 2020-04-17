@@ -19,6 +19,6 @@ module.exports = {
 
       Example:
       */
-     return queryInterface.dropTable('users');
+     return queryInterface.removeColumn('Rooms', 'date_occupied');
   }
 };

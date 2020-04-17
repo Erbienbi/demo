@@ -39,7 +39,7 @@ class Controller {
                 email: user.email,
             }
             let token = generateToken(userProfile)
-            res.status(200).json({ token, user: {id: user.id, name: user.name, role:user.role}, message: 'Log in successful' })
+            res.status(200).json({ token, user: {id: user.id, name: user.name, email:user.email}, message: 'Log in successful' })
         })
         .catch(next)
     }
