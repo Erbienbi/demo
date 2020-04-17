@@ -13,6 +13,6 @@ app.use(express.json())
 app.use(router)
 app.use(errorHandler)
 
-// app.listen(PORT, console.log(`Server live at port ${PORT}!`))
+app.listen(PORT, console.log(`Server live at port ${PORT}!`))
 
 module.exports = app
