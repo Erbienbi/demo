@@ -7,10 +7,10 @@ let tokenUser = null
 
 // USERS
 
-
+let TOKEN = null
 describe('Endpoints User/register', () => {
   // REDISTERED
-  it('status code 201 logged as user', async () => {
+  it('status code 201 creeted new user', async () => {
     const res = await request(app)
       .post('/user/register')
       .send({
@@ -81,21 +81,6 @@ describe('Endpoints User/register', () => {
     expect(res.status).toEqual(400)
     expect(res.body.message).toBe('The email is not in the right format!')
   })
-  // USER DUPLICATE
-  // it('status code 400 duplicate email', async () => {
-  //   const res = await request(app)
-  //     .post('/user/register')
-  //     .send({
-  //       name: 'test',
-  //       email: 'test@email.com',
-  //       password: '1234567'
-  //     })
-  //   expect(res.status).toEqual(400)
-  //   expect(res.body).toHaveProperty('data')
-  //   expect(res.body).toHaveProperty('message')
-  //   // expect(res.body.message).toBe('Successfully registered new user')
-  //
-  // })
   // PASSWORD NULL
   it('status code 400 Password less than 7', async () => {
     const res = await request(app)
@@ -133,6 +118,7 @@ describe('Endpoints User/login', () => {
     expect(res.status).toEqual(200)
     expect(res.body).toHaveProperty('token')
     expect(res.body.message).toBe('Log in successful')
+    TOKEN = res.body.token
   })
   // EMAIL NULL
   it('status code 400 email null', async () => {
@@ -166,5 +152,24 @@ describe('Endpoints User/login', () => {
       })
     expect(res.status).toEqual(400)
     expect(res.body.message).toBe('Wrong email/password')
+  })
+})
+
+// GET PROFIL
+describe('Endpoints user', () => {
+  it('status code 200 get profil', async () => {
+    const res = await request(app)
+      .get('/user')
+      .set('token', TOKEN)
+    expect(res.status).toEqual(200)
+    expect(res.body).toHaveProperty('name')
+  })
+  // GET PROFIL FAILED
+  it('status code 400 get profil failed', async () => {
+    const res = await request(app)
+      .get('/user')
+    // .set('token', TOKEN)
+    expect(res.status).toEqual(400)
+    expect(res.body.message).toBe('You need to login first!')
   })
 })
