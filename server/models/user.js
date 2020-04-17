@@ -46,19 +46,17 @@ module.exports = (sequelize, DataTypes) => {
         },
       }
     },
+    phone: {
+      type: DataTypes.STRING,
+    },
+    KTP: {
+      type: DataTypes.STRING,
+    },
     role: {
       type: DataTypes.STRING,
     },
     RoomId: {
-      type: DataTypes.INTEGER
-    },
-    KTP: {
-      type: DataTypes.STRING,
-      validate: {
-        notEmpty: {
-          msg: 'Please insert KTP number'
-        }
-      }
+      type: DataTypes.INTEGER,
     },
   }, {
     hooks: {
@@ -71,12 +69,11 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     sequelize,
-    timestamps: false,
   })
 
   User.associate = function (models) {
     // associations can be defined here
-    // User.hasOne(models.Room)
+    User.hasOne(models.Room)
   };
   return User;
 };
