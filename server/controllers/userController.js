@@ -8,7 +8,7 @@ class Controller {
         const { name, email, password} = req.body
         User.create({ name, email, password})
         .then(() => {
-            res.status(201).json({ name, email, message: 'Successfully registered new user' })
+            res.status(201).json('Successfully registered new user')
         })
         .catch(next)
     }
