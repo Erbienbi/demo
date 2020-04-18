@@ -7,7 +7,7 @@ class OwnerController {
         const { name, email, password, phone, ktp } = req.body
         Owner.create({ name, email, password, phone, ktp})
         .then(data => {
-            res.status(201).json({ data, message: 'Successfully registered new Owner' })
+            res.status(201).json('Successfully registered new Owner')
         })
         .catch(next)
     }
@@ -35,11 +35,10 @@ class OwnerController {
             let ownerProfile = {
                 id: owner.id,
                 name: owner.name,
-                email: owner.email,
-                role: owner.role,
+                email: owner.email
             }
             let token = generateToken(ownerProfile)
-            res.status(200).json({ token, owner: {id: owner.id, name: owner.name}, message: 'Log in successful' })
+            res.status(200).json({ token, user: {id: owner.id, name: owner.name, email: owner.email}, message: 'Log in successful' })
         })
         .catch(next)
     }
