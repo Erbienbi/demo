@@ -15,7 +15,8 @@ module.exports = (sequelize, DataTypes) => {
     bathroom: DataTypes.BOOLEAN,
     carPort: DataTypes.BOOLEAN,
     laundry: DataTypes.BOOLEAN,
-    gender: DataTypes.STRING
+    gender: DataTypes.STRING,
+    date_occupied: DataTypes.DATE
   }, {});
   Room.associate = function(models) {
     // associations can be defined here
