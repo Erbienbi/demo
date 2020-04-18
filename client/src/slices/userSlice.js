@@ -4,43 +4,54 @@ import { createSlice } from '@reduxjs/toolkit';
 export const slice = createSlice({
   name: 'user',
   initialState: {
-    number: 3,
-    authenticated : false,
-    id: null,
-    name: "Foo",
+    // number: 3,
+    authenticated: false,
     token: null,
+    id: null,
+    name: null,
     email: null,
+    error: null,
   },
   reducers: {
-    increment: state => {
-      console.log('Number:', state.number)
-      state.number += 1
-    },
-    decrement: state => {
-      console.log('Number:', state.number)
-      state.number -= 1
-    },
+    // increment: state => {
+    //   console.log('Number:', state.number)
+    //   state.number += 1
+    // },
+    // decrement: state => {
+    //   console.log('Number:', state.number)
+    //   state.number -= 1
+    // },
     login: (state, action) => {
-      state.token = action.payload.user.token
+      // console.log('Payload', action.payload)
+      state.token = action.payload.token
       state.id = action.payload.user.id
       state.name = action.payload.user.name
       state.email = action.payload.user.email
+      localStorage.setItem('token', state.token || localStorage.getItem('token'))
       state.authenticated = true
-      console.log('User state after log in:', JSON.stringify(state))
+      // console.log('User state after log in:', JSON.stringify(state))
     },
     logout: state => {
       state.token = null
       state.id = null
       state.name = null
       state.email = null
+      localStorage.removeItem('token')
       state.authenticated = false
-      console.log('User state after log out:', state)
+      // console.log('User state after log out:', state)
+    },
+    userError: (state, action) => {
+      console.log('Changing user error message:', action.payload)
+      state.error = action.payload.message
+    },
+    clearError: state => {
+      state.error = null
     }
   },
 });
 
 // export const { increment, decrement, incrementByAmount } = slice.actions;
-export const { increment, decrement, login, logout } = slice.actions;
+export const { login, logout, userError, clearError } = slice.actions;
 
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
