@@ -24,7 +24,6 @@ class RoomController {
             next({status:400, message:'You are not authorized'})
         }
         const { BuildingId } = req.params
-        console.log(BuildingId)
         try {
             let {
                 price,
@@ -51,7 +50,6 @@ class RoomController {
         }
     }
     static async deleteRoom(req,res,next){
-        console.log(req.params)
         if (req.userData.role) {
             next({status:400, message:'You are not authorized'})
         }
