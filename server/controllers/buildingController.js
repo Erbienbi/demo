@@ -31,7 +31,6 @@ class BuldingController {
     }
 
     static async getOneBuilding (req, res, next) {
-        console.log('MEMEK')
         const { id } = req.params
         try {
             const building = await Building.findOne({where:{ id }, include:[Room]})
