@@ -4,14 +4,19 @@ import { BrowserRouter } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import store from './store/index'
 import Home from "./components/Home"
+import Navbar from "./components/Navbar"
+import { Container } from 'react-bootstrap'
 
 function App() {
   return (
     <BrowserRouter>
       <div className="App">
-        <Provider store={store}>
-          <Home />
-        </Provider>
+        <Container >
+          <Provider store={store}>
+            <Navbar />
+            <Home />
+          </Provider>
+        </Container>
       </div>
     </BrowserRouter>
   );
