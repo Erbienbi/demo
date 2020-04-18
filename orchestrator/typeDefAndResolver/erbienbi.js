@@ -25,6 +25,7 @@ const schema = gql`
         carPort: Boolean
         laundry: Boolean
         gender: String
+        date_occupied: String
     }
 
     type Message {
@@ -51,13 +52,21 @@ const schema = gql`
         RoomId: Int
     }
 
+    type ownerProfile {
+        name: String!
+        email: String!
+        phone: String!
+        ktp: String!
+    }
 
+    
 
 
     extend type Query {
         getAllBuilding: [Building]
         getOneBuilding(id:Int): Building
         getOneUser(token:String): userProfile
+        getOneOwner(token:String) : ownerProfile
     }
 
     extend type Mutation {
@@ -84,6 +93,19 @@ const schema = gql`
             email: String!
             password: String!
         ) : Message
+
+        ownerRegister(
+            name: String!
+            email: String!
+            password: String!
+            phone: String!
+            ktp: String!
+        ) : Message
+
+        ownerLogin(
+            email: String!
+            password: String
+        ) : loginFeedback
     }
 
 
@@ -112,6 +134,17 @@ const resolver = {
             const { data } = await axios({
                 method:'GET',
                 url: `${ERBIENBI_SERVER}/user`,
+                headers: { token }
+            })
+            return data
+        },
+
+        //get specific user based on the ID got from the token
+        getOneOwner: async (_, args) => {
+            const { token } = args
+            const { data } = await axios({
+                method:'GET',
+                url: `${ERBIENBI_SERVER}/owner`,
                 headers: { token }
             })
             return data
@@ -175,6 +208,28 @@ const resolver = {
                 data: { name, email, password }
             })
             return {message:data}
+        },
+
+        //handling owner register
+        ownerRegister: async (_, args) => {
+            const { name, email, password, phone, ktp } = args
+            const { data } = await axios({
+                method:'POST',
+                url:`${ERBIENBI_SERVER}/owner/register`,
+                data: { name, email, password, phone, ktp }
+            })
+            return {message:data}
+        },
+
+        //handling owner login
+        ownerLogin: async (_, args) => {
+            const { email, password } = args
+            const { data } = await axios({
+                method:'POST',
+                url:`${ERBIENBI_SERVER}/owner/login`,
+                data: { email, password }
+            })
+            return data
         }
     }
 }
