@@ -44,7 +44,7 @@ class RoomController {
                 gender,
                 date_occupied
             })
-            res.status(201).json({message:'successfully create new room', room:newRoom })
+            res.status(201).json('successfully create new room')
         } catch (err) {
             next(err)
         }
@@ -57,7 +57,7 @@ class RoomController {
             const {RoomId} = req.params
             const success = await Room.destroy({where: {id:RoomId}})
             if (success == 1) {
-                res.status(200).json({message: 'room has been deleted succesfully'})
+                res.status(200).json('room has been deleted succesfully')
             }
             next({status:404, message:'Something wrong!'})
         } catch (err) {

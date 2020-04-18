@@ -4,7 +4,7 @@ class BuldingController {
 
     static async getAllBuilding (req, res, next) {
         try {
-            const allBuildings = await Building.findAll()
+            const allBuildings = await Building.findAll({include:[Room]})
             res.status(200).json(allBuildings)
         } catch (err) {
             next(err)
