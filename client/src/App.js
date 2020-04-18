@@ -6,6 +6,7 @@ import store from './store/index'
 import Home from "./components/Home"
 import Navbar from "./components/Navbar"
 import { Container } from 'react-bootstrap'
+import "./App.css";
 
 function App() {
   return (
