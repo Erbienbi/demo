@@ -49,11 +49,11 @@ export default () => {
           <Nav className="mr-auto">
             {!isAuthenticated
             ? <>
-                <Nav.Link><Link to="/register">Register</Link></Nav.Link>
-                <Nav.Link><Link to="/login">Sign In</Link></Nav.Link>
+                <Nav.Link><Link to="/register-user">Register</Link></Nav.Link>
+                <Nav.Link><Link to="/login-user">Sign In</Link></Nav.Link>
               </>
             : <>
-              <Nav.Link><Link to="/user">Profile</Link></Nav.Link>
+              <Nav.Link><Link to="/profile">Profile</Link></Nav.Link>
               <Nav.Link onClick={clickLogout}>Log Out</Nav.Link>
               </>
             }
