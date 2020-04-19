@@ -35,6 +35,7 @@ export default () => {
         style={{ backgroundColor: "rgba(85,196,167,1)" }}
       >
         <Navbar.Brand>
+        <Link to="/">
           <img
             alt=""
             src={Logo}
@@ -43,17 +44,18 @@ export default () => {
             style={{ margin: "-10%" }}
           />
           {/* Erbienbi */}
+        </Link>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="mr-auto">
             {!isAuthenticated
             ? <>
-                <Nav.Link><Link to="/register">Register</Link></Nav.Link>
-                <Nav.Link><Link to="/login">Sign In</Link></Nav.Link>
+                <Nav.Link><Link to="/register-user">Register</Link></Nav.Link>
+                <Nav.Link><Link to="/login-user">Sign In</Link></Nav.Link>
               </>
             : <>
-              <Nav.Link><Link to="/user">Profile</Link></Nav.Link>
+              <Nav.Link><Link to="/profile">Profile</Link></Nav.Link>
               <Nav.Link onClick={clickLogout}>Log Out</Nav.Link>
               </>
             }

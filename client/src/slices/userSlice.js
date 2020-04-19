@@ -5,7 +5,8 @@ export const slice = createSlice({
   name: 'user',
   initialState: {
     // number: 3,
-    authenticated: false,
+    authenticated: false, // checks whether user has logged in or not
+    isOwner: false, // checks whether user is an owner
     token: null,
     id: null,
     name: null,
@@ -37,11 +38,23 @@ export const slice = createSlice({
       state.name = null
       state.email = null
       localStorage.removeItem('token')
+      state.isOwner = false
       state.authenticated = false
       // console.log('User state after log out:', state)
     },
+    ownerLogin: (state, action) => {
+      console.log('Masuk', action)
+      state.token = action.payload.token
+      state.id = action.payload.owner.id
+      state.name = action.payload.owner.name
+      state.email = action.payload.owner.email
+      localStorage.setItem('owner_token', state.token || localStorage.getItem('owner_token'))
+      state.authenticated = true
+      state.isOwner = true
+      console.log('User state after log in:', state.isOwner)
+    },
     userError: (state, action) => {
-      console.log('Changing user error message:', action.payload)
+      // console.log('Changing user error message:', action.payload)
       state.error = action.payload.message
     },
     clearError: state => {
@@ -51,7 +64,7 @@ export const slice = createSlice({
 });
 
 // export const { increment, decrement, incrementByAmount } = slice.actions;
-export const { login, logout, userError, clearError } = slice.actions;
+export const { login, logout, ownerLogin, userError, clearError } = slice.actions;
 
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
