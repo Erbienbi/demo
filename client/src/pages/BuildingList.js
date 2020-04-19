@@ -5,22 +5,25 @@ import { gql } from 'apollo-boost';
 import { Link } from 'react-router-dom';
 
 const GET_ALL_BUILDING = gql`
-  query {
-    getAllBuilding {
-      id
-      OwnerId
-      area
-      address
-      Rooms {
-        price
-        ac
-        bathroom
-        carPort
-        laundry
-        gender
-      }
+    query {
+        getAllBuilding{
+            id
+            OwnerId
+            area
+            address
+            Rooms {
+                id
+                price
+                UserId
+                BuildingId
+                ac
+                bathroom
+                carPort
+                laundry
+                gender
+            }
+        }
     }
-  }
 `
 
 function BuildingList() {
