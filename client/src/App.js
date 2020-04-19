@@ -15,6 +15,7 @@ import Register from './pages/Register';
 import UserProfile from './pages/UserProfile';
 import BuildingList from './pages/BuildingList';
 import BuildingDetail from './pages/BuildingDetail';
+import Test360 from "./pages/Test";
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const isAuthenticated = useSelector(state => state.user.authenticated)
@@ -64,18 +65,19 @@ function App() {
   return (
     <div className="App">
       <Router>
-          <Container >
-            <Navbar />
-            <Switch>
-              <Route exact path="/" component={Home} />
-              <Route path="/register" component={Register} />
-              <Route path="/login" component={Login} />
-              <Route exact path="/building" component={BuildingList} />
-              <Route path="/building/:id" component={BuildingDetail} />
-              <PrivateRoute path="/user" component={UserProfile} />
-              <Route path="*" component={() => "404 NOT FOUND"}/>
-            </Switch>
-          </Container>      
+        <Container>
+          <Navbar />
+          <Switch>
+            <Route exact path="/" component={Home} />
+            <Route path="/test360" component={Test360} />
+            <Route path="/register" component={Register} />
+            <Route path="/login" component={Login} />
+            <Route exact path="/building" component={BuildingList} />
+            <Route path="/building/:id" component={BuildingDetail} />
+            <PrivateRoute path="/user" component={UserProfile} />
+            <Route path="*" component={() => "404 NOT FOUND"} />
+          </Switch>
+        </Container>
       </Router>
     </div>
   );
