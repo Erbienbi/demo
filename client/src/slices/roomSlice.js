@@ -6,22 +6,21 @@ export const slice = createSlice({
   initialState: {
     // number: 3,
     allBuildings: [],
-    current: {},
+    current: 0,
     error: null,
   },
   reducers: {
-    // increment: state => {
-    //   console.log('Number:', state.number)
-    //   state.number += 1
-    // },
-    // decrement: state => {
-    //   console.log('Number:', state.number)
-    //   state.number -= 1
-    // },
+    roomError: (state, action) => {
+      // console.log('Changing room error message:', action.payload)
+      state.error = action.payload.message
+    },
+    clearError: state => {
+      state.error = null
+    }
   },
 });
 
-// export const { increment, decrement } = slice.actions;
+export const { roomError, clearError } = slice.actions;
 
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This

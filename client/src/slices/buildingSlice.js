@@ -4,24 +4,29 @@ import { createSlice } from '@reduxjs/toolkit';
 export const slice = createSlice({
   name: 'building',
   initialState: {
-    // number: 3,
     allBuildings: [],
-    current: {},
+    current: 0,
     error: null,
   },
   reducers: {
-    // increment: state => {
-    //   console.log('Number:', state.number)
-    //   state.number += 1
-    // },
-    // decrement: state => {
-    //   console.log('Number:', state.number)
-    //   state.number -= 1
-    // },
+    createBuilding: (state, action) => {
+      console.log('Create building slice:', action.payload)
+      state.allBuildings.push(action.payload)
+    },
+    deleteBuilding: (state, action) => {
+      console.log('Delete building slice:')
+    },
+    buildingError: (state, action) => {
+      // console.log('Changing building error message:', action.payload)
+      state.error = action.payload.message
+    },
+    clearError: state => {
+      state.error = null
+    }
   },
 });
 
-// export const { increment, decrement } = slice.actions;
+export const { createBuilding, deleteBuilding, buildingError, clearError } = slice.actions;
 
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This

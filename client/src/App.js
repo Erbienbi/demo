@@ -6,7 +6,6 @@ import { Container } from 'react-bootstrap';
 import { login, ownerLogin } from './slices/userSlice';
 import Navbar from "./components/Navbar";
 import appAxios from './config/appAxios';
-// import store from './store/index';
 
 // Pages //
 import Home from './pages/Home';
@@ -19,6 +18,9 @@ import BuildingList from './pages/BuildingList';
 import BuildingDetail from './pages/BuildingDetail';
 import AddBuilding from './pages/AddBuilding';
 import AddRoom from './pages/AddRoom';
+import RoomList from './pages/RoomList';
+import RoomDetail from './pages/RoomDetail';
+import BuildingRoom from './pages/BuildingRoom';
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const isAuthenticated = useSelector(state => state.user.authenticated)
@@ -64,7 +66,7 @@ function App() {
       })
         .then(({data}) => {
           console.log('Success using user token!', data)
-          const token = data.token
+          const token = localStorage.getItem('token')
           const user = {
             id: data.id,
             name: data.name,
@@ -85,13 +87,13 @@ function App() {
       })
         .then(({data}) => {
           console.log('Success using owner token!', data)
-          const token = data.token
-          const user = {
+          const token = localStorage.getItem('owner_token')
+          const owner = {
             id: data.id,
             name: data.name,
             email: data.email
           }
-          dispatch(ownerLogin({token, user}))
+          dispatch(ownerLogin({token, owner}))
         })
         .catch((err) => {
           console.log('The owner token is not valid', err)
@@ -110,11 +112,18 @@ function App() {
               <Route path="/login-user" component={UserLogin} />
               <Route path="/register-owner" component={OwnerRegister} />
               <Route path="/login-owner" component={OwnerLogin} />
+
+              <Route exact path="/room" component={RoomList} />
               <Route exact path="/building" component={BuildingList} />
               <Route path="/building/:id" component={BuildingDetail} />
+              <Route exact path="/host/:BuildingId/:RoomId" component={RoomDetail} />
+              <Route path="/host/:BuildingId" component={BuildingRoom} />
+
               <PrivateRoute path="/profile" component={Profile} />
+
               <OwnerOnly path="/add-building" component={AddBuilding} />
               <OwnerOnly path="/add-room" component={AddRoom} />
+
               <Route path="*" component={() => "404 NOT FOUND"}/>
             </Switch>
           </Container>      

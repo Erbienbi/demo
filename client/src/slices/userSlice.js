@@ -43,7 +43,7 @@ export const slice = createSlice({
       // console.log('User state after log out:', state)
     },
     ownerLogin: (state, action) => {
-      console.log('Masuk')
+      console.log('Masuk', action)
       state.token = action.payload.token
       state.id = action.payload.owner.id
       state.name = action.payload.owner.name
@@ -51,6 +51,7 @@ export const slice = createSlice({
       localStorage.setItem('owner_token', state.token || localStorage.getItem('owner_token'))
       state.authenticated = true
       state.isOwner = true
+      console.log('User state after log in:', state.isOwner)
     },
     userError: (state, action) => {
       // console.log('Changing user error message:', action.payload)
