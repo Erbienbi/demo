@@ -4,8 +4,9 @@ const {generateToken} = require('../helpers/jsonwebtoken.js')
 
 class OwnerController {
     static register(req, res, next) {
-        const { name, email, password, phone, ktp } = req.body
-        Owner.create({ name, email, password, phone, ktp})
+        const { name, email, password, phone, file } = req.body
+        console.log(file, "ini file gcp =====================")
+        Owner.create({ name, email, password, phone, ktp: file})
         .then(data => {
             res.status(201).json('Successfully registered new Owner')
         })
