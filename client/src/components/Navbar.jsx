@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Navbar,
   Nav,
@@ -8,12 +8,22 @@ import {
   FormControl,
   Button,
   NavItem,
-} from "react-bootstrap";
-import { FaUserCircle } from "react-icons/fa";
-import { IoMdNotificationsOutline } from "react-icons/io";
-import Logo from "../assets/logo.png";
+} from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../slices/userSlice';
+import { Link } from 'react-router-dom';
+import { FaUserCircle } from 'react-icons/fa';
+import { IoMdNotificationsOutline } from 'react-icons/io';
+import Logo from '../assets/logo.png';
 
 export default () => {
+  const dispatch = useDispatch()
+  const isAuthenticated = useSelector(state => state.user.authenticated)
+
+  const clickLogout = () => {
+    dispatch(logout())
+  }
+
   return (
     <>
       <Navbar
@@ -37,11 +47,20 @@ export default () => {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="mr-auto">
-            <Nav.Link href="#features">Features</Nav.Link>
+            {!isAuthenticated
+            ? <>
+                <Nav.Link><Link to="/register">Register</Link></Nav.Link>
+                <Nav.Link><Link to="/login">Sign In</Link></Nav.Link>
+              </>
+            : <>
+              <Nav.Link><Link to="/user">Profile</Link></Nav.Link>
+              <Nav.Link onClick={clickLogout}>Log Out</Nav.Link>
+              </>
+            }
             <NavDropdown title="Dropdown" id="collasible-nav-dropdown">
               <NavDropdown.Item href="#action/3.1">Profil</NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.4">Logout</NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.4">Item</NavDropdown.Item>
             </NavDropdown>
           </Nav>
           <Nav>
@@ -63,7 +82,7 @@ export default () => {
             >
               <NavDropdown.Item href="#action/3.1">Profil</NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.4">Logout</NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.4">Item</NavDropdown.Item>
             </NavDropdown>
           </Nav>
         </Navbar.Collapse>
