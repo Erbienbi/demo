@@ -7,7 +7,7 @@ import axios from "axios";
 
 // Request to local server //
 const instance = axios.create({
-  baseURL: "http://localhost:3001",
+  baseURL: "http://localhost:3000",
 });
 
 export default instance;

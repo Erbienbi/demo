@@ -21,6 +21,13 @@ import AddRoom from './pages/AddRoom';
 import RoomList from './pages/RoomList';
 import RoomDetail from './pages/RoomDetail';
 
+// TESTING COMPONENT
+import Test from './pages/Building'
+
+// STYLE PAGE
+import HomePage from './pages/Home.jsx'
+import BuildingPage from "./pages/Building.jsx";
+
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const isAuthenticated = useSelector(state => state.user.authenticated)
   return (
@@ -103,29 +110,40 @@ function App() {
   return (
     <div className="App">
       <Router>
-          <Container >
-            <Navbar />
-            <Switch>
-              <Route exact path="/" component={Home} />
-              <Route path="/register-user" component={UserRegister} />
-              <Route path="/login-user" component={UserLogin} />
-              <Route path="/register-owner" component={OwnerRegister} />
-              <Route path="/login-owner" component={OwnerLogin} />
+        <Container>
+          <Navbar />
+          <Switch>
+            {/* TESTING COMPONENT */}
+            <Route exact path="/test" component={Test} />
+            {/* END-TESTING COMPONENT */}
+            {/* WITH STYLE */}
+            <Route exact path="/" component={HomePage} />
+            <Route path="/building/:BuildingId" component={BuildingPage} />
+            {/* END WITH STYLE */}
+            <Route exact path="/home" component={Home} />
+            <Route path="/register-user" component={UserRegister} />
+            <Route path="/login-user" component={UserLogin} />
+            <Route path="/register-owner" component={OwnerRegister} />
+            <Route path="/login-owner" component={OwnerLogin} />
 
-              <Route exact path="/room" component={RoomList} />
-              <Route exact path="/building" component={BuildingList} />
-              
-              <Route exact path="/host/:BuildingId/:RoomId" component={RoomDetail} />
-              <Route path="/host/:BuildingId" component={BuildingDetail} />
+            <Route exact path="/room" component={RoomList} />
+            <Route exact path="/building" component={BuildingList} />
 
-              <PrivateRoute path="/profile" component={Profile} />
+            <Route
+              exact
+              path="/host/:BuildingId/:RoomId"
+              component={RoomDetail}
+            />
+            <Route path="/host/:BuildingId" component={BuildingDetail} />
 
-              <OwnerOnly path="/add-building" component={AddBuilding} />
-              <OwnerOnly path="/add-room" component={AddRoom} />
+            <PrivateRoute path="/profile" component={Profile} />
 
-              <Route path="*" component={() => "404 NOT FOUND"}/>
-            </Switch>
-          </Container>      
+            <OwnerOnly path="/add-building" component={AddBuilding} />
+            <OwnerOnly path="/add-room" component={AddRoom} />
+
+            <Route path="*" component={() => "404 NOT FOUND"} />
+          </Switch>
+        </Container>
       </Router>
     </div>
   );

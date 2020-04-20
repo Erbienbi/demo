@@ -18,7 +18,8 @@ import Logo from '../assets/logo.png';
 
 export default () => {
   const dispatch = useDispatch()
-  const isAuthenticated = useSelector(state => state.user.authenticated)
+  const isAuthenticated = useSelector((state) => state.user.authenticated);
+  const user = useSelector((state) => state.user);
 
   const clickLogout = () => {
     dispatch(logout())
@@ -31,61 +32,99 @@ export default () => {
         expand="lg"
         // bg="dark"
         variant="dark"
-        className="rounded-bottom shadow-lg"
+        className="rounded-bottom shadow-sm"
         style={{ backgroundColor: "rgba(85,196,167,1)" }}
+        sticky="top"
       >
         <Navbar.Brand>
-        <Link to="/">
-          <img
-            alt=""
-            src={Logo}
-            height="50"
-            className="d-inline-block align-top"
-            style={{ margin: "-10%" }}
-          />
-          {/* Erbienbi */}
-        </Link>
+          <Link to="/">
+            <img
+              alt=""
+              src={Logo}
+              height="50"
+              className="d-inline-block align-top"
+              style={{ margin: "-10%" }}
+            />
+            {/* Erbienbi */}
+          </Link>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="mr-auto">
-            {!isAuthenticated
-            ? <>
-                <Nav.Link><Link to="/register-user">Register</Link></Nav.Link>
-                <Nav.Link><Link to="/login-user">Sign In</Link></Nav.Link>
+            {/* {!isAuthenticated ? (
+              <>
+                <Nav.Link>
+                  <Link to="/register-user">Register</Link>
+                </Nav.Link>
+                <Nav.Link>
+                  <Link to="/login-user">Sign In</Link>
+                </Nav.Link>
               </>
-            : <>
-              <Nav.Link><Link to="/profile">Profile</Link></Nav.Link>
-              <Nav.Link onClick={clickLogout}>Log Out</Nav.Link>
+            ) : (
+              <>
+                <Nav.Link>
+                  <Link to="/profile">Profile</Link>
+                </Nav.Link>
+                <Nav.Link onClick={clickLogout}>Log Out</Nav.Link>
               </>
-            }
-            <NavDropdown title="Dropdown" id="collasible-nav-dropdown">
+            )} */}
+            {/* <NavDropdown title="Dropdown" id="collasible-nav-dropdown">
               <NavDropdown.Item href="#action/3.1">Profil</NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item href="#action/3.4">Item</NavDropdown.Item>
-            </NavDropdown>
+            </NavDropdown> */}
           </Nav>
           <Nav>
-            <Nav>
+            {/* <Nav>
               <Form inline>
                 <FormControl
                   type="text"
                   placeholder="Search"
-                  className=" mr-sm-2" 
+                  className=" mr-sm-2"
                 />
               </Form>
-            </Nav>
-            <Nav.Link>
+            </Nav> */}
+            {/* <Nav.Link>
               <IoMdNotificationsOutline style={{ fontSize: "2rem" }} />
-            </Nav.Link>
-            <NavDropdown
-              id="collasible-nav-dropdown"
-              title={<FaUserCircle style={{ fontSize: "2rem" }} />}
-            >
-              <NavDropdown.Item href="#action/3.1">Profil</NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.4">Item</NavDropdown.Item>
-            </NavDropdown>
+            </Nav.Link> */}
+            {!isAuthenticated ? (
+              <>
+                <Nav.Link>
+                  <Link to="/register-user" className="btn">
+                    Register
+                  </Link>
+                </Nav.Link>
+                <Nav.Link>
+                  <Link to="/login-user" className="btn">
+                    Sign In
+                  </Link>
+                </Nav.Link>
+              </>
+            ) : (
+              <>
+                {/* <Nav.Link> */}
+                {/* {user.name} */}
+                {/* </Nav.Link> */}
+                <NavDropdown
+                  id="collasible-nav-dropdown"
+                  title={
+                    <>
+                      {user.name} <FaUserCircle style={{ fontSize: "2rem" }} />
+                    </>
+                  }
+                >
+                  <NavDropdown.Item href="">
+                    <Link to="/profile" classNmae="btn">
+                      Profile
+                    </Link>
+                  </NavDropdown.Item>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item href="" onClick={clickLogout}>
+                    Logout
+                  </NavDropdown.Item>
+                </NavDropdown>
+              </>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Navbar>
