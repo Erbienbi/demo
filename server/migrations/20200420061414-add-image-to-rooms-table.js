@@ -8,7 +8,7 @@ module.exports = {
 
       Example:
       */
-     return queryInterface.removeColumn('Rooms', 'OwnerId');
+     return queryInterface.addColumn('Rooms', 'image', Sequelize.STRING);
   },
 
   down: (queryInterface, Sequelize) => {
@@ -17,7 +17,7 @@ module.exports = {
       Return a promise to correctly handle asynchronicity.
 
       Example:
-      return queryInterface.dropTable('users');
       */
+     return queryInterface.removeColumn('Rooms', 'image');
   }
 };
