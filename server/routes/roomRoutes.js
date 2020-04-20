@@ -1,5 +1,5 @@
 const roomController = require('../controllers/roomController.js')
-const { authentication } = require('../middlewares/auth.js')
+const { authentication, ownerAuthorization } = require('../middlewares/auth.js')
 const upload = require("../helpers/googleStorage")
 
 const express = require('express')

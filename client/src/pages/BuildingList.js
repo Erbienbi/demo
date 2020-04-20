@@ -21,6 +21,7 @@ const GET_ALL_BUILDING = gql`
                 carPort
                 laundry
                 gender
+                date_occupied
             }
         }
     }
@@ -41,6 +42,7 @@ function BuildingList() {
                         <div key={result._id} result={result}>
                             <h5>Area: {result.area}</h5>
                             <h6>Address: {result.address}</h6>
+                            <p>available rooms: {result.Rooms.length}</p>
                         </div>
                     </Link>
                 ))}

@@ -2,7 +2,7 @@ const { gql } = require('apollo-server-express')
 const Redis = require('ioredis')
 const redis = new Redis()
 
-const ERBIENBI_SERVER = 'http://localhost:3000'
+const ERBIENBI_SERVER = 'http://localhost:3001'
 const axios = require('axios')
 
 const schema = gql`
@@ -75,7 +75,6 @@ const schema = gql`
     extend type Mutation {
         postBuilding(
             token: String!
-            OwnerId:Int!
             area: String!
             address: String!
             coordinate: String!
@@ -142,8 +141,11 @@ const resolver = {
             }
 
             const { data } = await axios.get(`${ERBIENBI_SERVER}/building`)
+            console.log(data)
             await redis.set('Buildings', JSON.stringify(data))
             return data
+            
+
         },
         getOneBuilding: async(_,args) => {
             const cache = await redis.get('Buildings')
@@ -211,9 +213,8 @@ const resolver = {
     Mutation: {
         //posting new building (go through authentication as need token as the headers)
         postBuilding: async (_, args) => {
-            const { OwnerId, area, coordinate, address, token } = args
+            const { area, coordinate, address, token } = args
             const newBuilding = {
-                OwnerId,
                 area,
                 coordinate,
                 address
