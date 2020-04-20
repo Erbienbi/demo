@@ -9,6 +9,10 @@ export const slice = createSlice({
     error: null,
   },
   reducers: {
+    storeAllBuilding: (state, action) => {
+      console.log('Store building:', action.payload)
+      state.allBuildings = (action.payload)
+    },
     createBuilding: (state, action) => {
       console.log('Create building slice:', action.payload)
       state.allBuildings.push(action.payload)
@@ -26,7 +30,7 @@ export const slice = createSlice({
   },
 });
 
-export const { createBuilding, deleteBuilding, buildingError, clearError } = slice.actions;
+export const { storeAllBuilding, createBuilding, deleteBuilding, buildingError, clearError } = slice.actions;
 
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
