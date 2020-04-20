@@ -12,6 +12,20 @@ const GET_ALL_BUILDING = gql`
             OwnerId
             area
             address
+            coordinate
+            image
+            Rooms {
+                id
+                price
+                UserId
+                BuildingId
+                bathroom
+                carPort
+                laundry
+                gender
+                date_occupied
+                image
+            }
         }
     }
 `
