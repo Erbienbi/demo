@@ -24,7 +24,7 @@ function BuildingList() {
 
     useEffect(() => {
         if (data) {
-            console.log(data.getAllBuilding)
+            console.log('From the database:', data.getAllBuilding)
             dispatch(storeAllBuilding(data.getAllBuilding))
             setIsLoading(false)
         }

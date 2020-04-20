@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
+import { useSelector } from 'react-redux';
 import { gql } from 'apollo-boost';
 import { Link } from 'react-router-dom';
 
@@ -22,6 +23,7 @@ const GET_ONE_BUILDING = gql`
 function BuildingDetail(props) {
     const { BuildingId } = useParams()
     const [isLoading, setIsLoading] = useState(false)
+    const user = useSelector(state => state.user)
     const { error, loading, data } = useQuery(GET_ONE_BUILDING, {
         variables: {
             id: Number(BuildingId),
@@ -42,8 +44,13 @@ function BuildingDetail(props) {
         return (
             <div>
                 <div>
-                    <span>Have a room to rent?</span>
-                    <button onClick={() => props.history.push('/add-room')}>Add New Room</button>
+                    {user.isOwner
+                        ? <>
+                            <span>Have a room to rent?</span>
+                            <button onClick={() => props.history.push('/add-room')}>Add New Room</button>
+                          </>
+                        : ''
+                    }
                 </div>
                 <div>
                     <h1>Building { BuildingId } Page </h1>
@@ -55,11 +62,19 @@ function BuildingDetail(props) {
                 <h1>Room List</h1>
                 <section className="results">
                     {data.getOneBuilding.Rooms.map(result => (
-                        <Link to={`/host/${BuildingId}/${result.id}`}>
-                            <div key={result.id} result={result}>
-                                <h5>Price: {result.price}</h5>
+                        <div key={result.id}>
+                            <Link to={`/host/${BuildingId}/${result.id}`}>
+                            <div result={result}>
+                                <span>Price: {result.price} </span>
                             </div>
-                        </Link>
+                            </Link>
+                            {!user.isOwner
+                                ? <button onClick={() => console.log(`Booked room ${result.id}!`)}>
+                                    Book Room
+                                  </button>
+                                : ''
+                            }
+                        </div>
                     ))}
                 </section>
             </div>
