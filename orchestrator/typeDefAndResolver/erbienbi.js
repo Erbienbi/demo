@@ -84,6 +84,13 @@ const schema = gql`
             image: String
         ) : Message
 
+        updateRoom(
+            date_occupied: String!
+            BuildingId: Int!
+            RoomId: Int!
+            token: String!
+        ) : Message
+
         postRoom(
             token: String!
             BuildingId:Int!
@@ -267,6 +274,26 @@ const resolver = {
             await redis.del('Buildings')
             const getAllBuilding = await axios.get(`${ERBIENBI_SERVER}/building`)
             await redis.set('Buildings', JSON.stringify(getAllBuilding.data))
+            return {message:data}
+        },
+
+        //updating room once the user book and paid the room
+        updateRoom: async (_, args) => {
+            const { date_occupied, RoomId, BuildingId, token } = args
+            const { data } = await axios({
+                method:'PUT',
+                url:`${ERBIENBI_SERVER}/room/${BuildingId}/${RoomId}`,
+                headers: {token},
+                data: {
+                    date_occupied
+                }
+            })
+            await redis.del('Rooms')
+            await redis.del('Buildings')
+            const getAllRooms = await axios.get(`${ERBIENBI_SERVER}/room`)
+            const getAllBuilding = await axios.get(`${ERBIENBI_SERVER}/building`)
+            await redis.set('Buildings', JSON.stringify(getAllBuilding.data))
+            await redis.set('Rooms', JSON.stringify(getAllRooms.data))
             return {message:data}
         },
 
