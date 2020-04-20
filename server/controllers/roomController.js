@@ -68,26 +68,23 @@ class RoomController {
     }
 
     static async updateRoom (req,res,next){
-        const {RoomId, BuildingId} = req.params
-        let {
-            price,
-            ac,
-            bathroom,
-            carPort,
-            laundry,
-            gender } = req.body
-            let obj = {
-                UserId:req.userData.id,
-                price,
-                BuildingId,
-                ac,
-                bathroom,
-                carPort,
-                laundry,
-                gender
+        const { BuildingId, RoomId } = req.params
+        const userId = req.userData.id
+        const { date_occupied } = req.body
+        const updateData = {
+            UserId: userId,
+            date_occupied
+        }
+        try {
+            const updateRoom = await Room.update(updateData,{where:{id:RoomId}})
+            if (updateRoom[0] === 1) {
+                res.status(200).json('Room sucessfully booked')
+            } else {
+                next({status:400, message:'Something is wrong'})
             }
-        await Room.update({where:{id:RoomId}}, obj)
-        res.status(200).json({message: 'successfully updated rooms'})
+        } catch (err) {
+            next(err)
+        }
     }
 }
 
