@@ -60,35 +60,35 @@ function AddBuilding(props) {
                 {building.error
                     ? <p>{JSON.stringify(building.error)}</p>
                     : ''
-                    }
-                    <form onSubmit={submitForm}>
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <td>Area</td>
-                                    <td><input type="text" name="area" onChange={formChange} /></td>
-                                </tr>
-                                <tr>
-                                    <td>Address</td>
-                                    <td><input type="text" name="address" onChange={formChange} /></td>
-                                </tr>
-                                <tr>
-                                    <td>Coordinate (insert Google Map here)</td>
-                                    <td><input type="text" name="coordinate" onChange={formChange} /></td>
-                                </tr>
-                                <tr>
-                                    <td>Building Image (select one):<input type="file" name="image" onChange={formChange} /></td>
-                                    <td><input type="text" name="image" onChange={formChange} /></td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td><input type="submit" value="Add Host Building"/></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </form>
-                    <span>Return to building list</span>
-                    <button onClick={() => props.history.push('/')}>Go back</button>
+                }
+                <form onSubmit={submitForm}>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>Area</td>
+                                <td><input type="text" name="area" onChange={formChange} /></td>
+                            </tr>
+                            <tr>
+                                <td>Address</td>
+                                <td><input type="text" name="address" onChange={formChange} /></td>
+                            </tr>
+                            <tr>
+                                <td>Coordinate (insert Google Map here)</td>
+                                <td><input type="text" name="coordinate" onChange={formChange} /></td>
+                            </tr>
+                            <tr>
+                                <td>Building Image (select one):<input type="file" name="image" onChange={formChange} /></td>
+                                <td><input type="text" name="image" onChange={formChange} /></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td><input type="submit" value="Add Host Building"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+                <span>Return to building list</span>
+                <button onClick={() => props.history.push('/building')}>Go back</button>
             </div>
         );
     }

@@ -20,7 +20,6 @@ import AddBuilding from './pages/AddBuilding';
 import AddRoom from './pages/AddRoom';
 import RoomList from './pages/RoomList';
 import RoomDetail from './pages/RoomDetail';
-import BuildingRoom from './pages/BuildingRoom';
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const isAuthenticated = useSelector(state => state.user.authenticated)
@@ -115,9 +114,9 @@ function App() {
 
               <Route exact path="/room" component={RoomList} />
               <Route exact path="/building" component={BuildingList} />
-              <Route path="/building/:id" component={BuildingDetail} />
+              
               <Route exact path="/host/:BuildingId/:RoomId" component={RoomDetail} />
-              <Route path="/host/:BuildingId" component={BuildingRoom} />
+              <Route path="/host/:BuildingId" component={BuildingDetail} />
 
               <PrivateRoute path="/profile" component={Profile} />
 
