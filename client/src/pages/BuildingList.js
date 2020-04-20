@@ -24,6 +24,7 @@ function BuildingList() {
 
     useEffect(() => {
         if (data) {
+            console.log(data.getAllBuilding)
             dispatch(storeAllBuilding(data.getAllBuilding))
             setIsLoading(false)
         }
@@ -35,13 +36,14 @@ function BuildingList() {
     if (isLoading) {
         return <p> Loading...</p>
     } else {
+        console.log('All buildings:', building.allBuildings)
         return (
             <div>
                 <h1>Building List</h1>
                 <section className="results">
                     {building.allBuildings.map(result => (
-                        <Link to={`/host/${result.id}`}>
-                            <div key={result.id} result={result}>
+                        <Link key={result.id} to={`/host/${result.id}`}>
+                            <div result={result}>
                                 <h5>Area: {result.area}</h5>
                                 <h6>Address: {result.address}</h6>
                             </div>

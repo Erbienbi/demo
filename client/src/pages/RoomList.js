@@ -5,7 +5,8 @@ import { storeAllBuilding } from '../slices/buildingSlice';
 import { gql } from 'apollo-boost';
 import { Link } from 'react-router-dom';
 
-// Belum ada endpoint untuk Get All Rooms from All Building
+// Kok aku nggak nemu endpoint untuk Get All Rooms from All Building ya :thonk:
+// Jadi ya, sekarang masih kosong
 
 function RoomList() {
     const dispatch = useDispatch()

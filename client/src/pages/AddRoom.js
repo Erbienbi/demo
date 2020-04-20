@@ -1,18 +1,29 @@
 import React, { useState, useEffect } from 'react';
+import { useQuery } from '@apollo/react-hooks';
 import { Redirect } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { roomError, clearError } from '../slices/roomSlice';
+import { gql } from 'apollo-boost';
 import appAxios from '../config/appAxios';
 
-
+const GET_ALL_BUILDING = gql`
+    query {
+        getAllBuilding{
+            id
+            OwnerId
+            area
+            address
+        }
+    }
+`
 
 function AddRoom(props) {
     const dispatch = useDispatch()
     const [isLoading, setIsLoading] = useState(false)
     const user = useSelector(state => state.user)
-    const building = useSelector(state => state.building.allBuildings
-        // state.building.allBuildings.filter(each => each.OwnerId === user.id)
-    )
+    const { error, loading, data } = useQuery(GET_ALL_BUILDING)
+    // const building = useSelector(state => state.building.allBuildings)
+
     const room = useSelector(state => state.room)
     const [form, setForm] = useState({
         price: '',
@@ -23,11 +34,6 @@ function AddRoom(props) {
         laundry: '',
         gender: '',
     });
-
-    useEffect(() => {
-        dispatch(clearError())
-        // console.log('isLoading is now:', isLoading)
-    }, []);
 
     const formChange = (e) => {
         console.log(form)
@@ -47,7 +53,6 @@ function AddRoom(props) {
 
     const submitForm = async (e) => {
         e.preventDefault()
-        console.log('Building by owner:', building)
         console.log('Form submit:', form)
         if (!form.BuildingId) {
             alert('You need to select a building!')
@@ -55,7 +60,7 @@ function AddRoom(props) {
             setIsLoading(true)
             appAxios({
                 method: 'POST',
-                url: '/room',
+                url: `/room/${form.BuildingId}`,
                 data: form,
                 headers: {
                     token: user.token
@@ -73,10 +78,13 @@ function AddRoom(props) {
             })
         }
     }
-    if (isLoading) {
+
+    if (loading) {
+        return <h1>Loading...</h1>
+    } else if (isLoading) {
         return <h1>Loading...</h1>
     } else {
-        console.log('Building:', building)
+        console.log('Building:', data)
         return (
             <div>
                 <h1>Add Room</h1>
@@ -90,12 +98,13 @@ function AddRoom(props) {
                             <tr>
                                 <td>Select Building</td>
                                 <td>
-                                    <select name="BuildingId" onChange={formChange} onSelect={formChange}>
+                                    <select name="BuildingId" onChange={booleanForm}>
+                                        <option disabled selected>Select one</option>
                                     
-                                        {building && building
+                                        {data && data.getAllBuilding
                                             .filter(each => each.OwnerId === user.id)
                                             .map(each => (
-                                                <option key={each.id} value={each.id}>{each.area}</option>
+                                                <option key={each.id} value={Number(each.id)}>{each.area}</option>
                                             )
                                         )}
                                     </select>
