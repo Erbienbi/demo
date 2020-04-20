@@ -13,6 +13,7 @@ const schema = gql`
         area: String!
         address: String!
         coordinate: String!
+        image: String
         Rooms: [Room]
     }
 
@@ -27,6 +28,7 @@ const schema = gql`
         laundry: Boolean
         gender: String
         date_occupied: String
+        image: String
     }
 
     type Message {
@@ -79,6 +81,7 @@ const schema = gql`
             area: String!
             address: String!
             coordinate: String!
+            image: String
         ) : Message
 
         postRoom(
@@ -91,6 +94,7 @@ const schema = gql`
             laundry: Boolean
             gender: String
             date_occupied: String
+            image: String
         ) : Message
 
         deleteBuilding(
@@ -211,12 +215,13 @@ const resolver = {
     Mutation: {
         //posting new building (go through authentication as need token as the headers)
         postBuilding: async (_, args) => {
-            const { OwnerId, area, coordinate, address, token } = args
+            const { OwnerId, area, coordinate, address, token, image } = args
             const newBuilding = {
                 OwnerId,
                 area,
                 coordinate,
-                address
+                address,
+                image
             }
 
             const { data } = await axios({
@@ -233,8 +238,8 @@ const resolver = {
 
         //Add new room to the desired building (need building id as params) goes through authentication as only owner can add building
         postRoom: async (_, args) => {
-            const { token, BuildingId, price, ac, bathroom, carPort, laundry, gender } = args
-            const newRoom = { price, ac, bathroom, carPort, laundry, gender }
+            const { token, BuildingId, price, ac, bathroom, carPort, laundry, gender, image } = args
+            const newRoom = { price, ac, bathroom, carPort, laundry, gender, image }
 
             const { data } = await axios({
                 method:'POST',
