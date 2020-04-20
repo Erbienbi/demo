@@ -61,31 +61,6 @@ const OwnerLogin = (props) => {
     //     })
     // };
 
-    // const submitForm = async (e) => {
-    //     e.preventDefault()
-    //     setIsLoading(true)
-    //     console.log('Form submit:', form)
-    //     appAxios({
-    //         method: 'POST',
-    //         url: '/owner/login',
-    //         data: form,
-    //     })
-    //     .then(({data}) => {
-    //         console.log('Login successful!', data)
-    //         return dispatch(ownerLogin(data))
-    //     })
-    //     .then(() => {
-    //         console.log('Data has been dispatched!')
-    //         setStatus({ redirectRefs: true })
-    //         setIsLoading(false)
-    //     })
-    //     .catch((err) => {
-    //         console.log('Login failed!', err.response)
-    //         dispatch(userError(err.response.data))
-    //         setIsLoading(false)
-    //     })
-    // }
-
     if (isLoading) {
         return <h1>Loading...</h1>
     } else if (status.redirectRefs === true) {

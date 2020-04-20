@@ -87,12 +87,12 @@ function App() {
         .then(({data}) => {
           console.log('Success using owner token!', data)
           const token = localStorage.getItem('owner_token')
-          const owner = {
+          const user = {
             id: data.id,
             name: data.name,
             email: data.email
           }
-          dispatch(ownerLogin({token, owner}))
+          dispatch(ownerLogin({token, user}))
         })
         .catch((err) => {
           console.log('The owner token is not valid', err)
