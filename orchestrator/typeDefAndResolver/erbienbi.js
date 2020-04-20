@@ -77,7 +77,6 @@ const schema = gql`
     extend type Mutation {
         postBuilding(
             token: String!
-            OwnerId:Int!
             area: String!
             address: String!
             coordinate: String!
@@ -222,14 +221,15 @@ const resolver = {
     Mutation: {
         //posting new building (go through authentication as need token as the headers)
         postBuilding: async (_, args) => {
-            const { OwnerId, area, coordinate, address, token, image } = args
+            const { area, coordinate, address, token, image } = args
             const newBuilding = {
-                OwnerId,
+                // OwnerId,
                 area,
                 coordinate,
                 address,
                 image
             }
+            console.log(args)
 
             const { data } = await axios({
                 method: 'POST',
@@ -237,6 +237,7 @@ const resolver = {
                 headers: {token},
                 data: newBuilding
             })
+            await console.log(data)
             await redis.del('Buildings')
             const getAllBuilding = await axios.get(`${ERBIENBI_SERVER}/building`)
             await redis.set('Buildings', JSON.stringify(getAllBuilding.data))
@@ -247,7 +248,7 @@ const resolver = {
         postRoom: async (_, args) => {
             const { token, BuildingId, price, ac, bathroom, carPort, laundry, gender, image } = args
             const newRoom = { price, ac, bathroom, carPort, laundry, gender, image }
-
+            console.log(args)
             const { data } = await axios({
                 method:'POST',
                 url:`${ERBIENBI_SERVER}/room/${BuildingId}`,
