@@ -45,9 +45,9 @@ export const slice = createSlice({
     ownerLogin: (state, action) => {
       console.log('Masuk', action)
       state.token = action.payload.token
-      state.id = action.payload.owner.id
-      state.name = action.payload.owner.name
-      state.email = action.payload.owner.email
+      state.id = action.payload.user.id
+      state.name = action.payload.user.name
+      state.email = action.payload.user.email
       localStorage.setItem('owner_token', state.token || localStorage.getItem('owner_token'))
       state.authenticated = true
       state.isOwner = true

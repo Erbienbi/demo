@@ -2,7 +2,26 @@ import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { ownerLogin, userError, clearError } from '../slices/userSlice';
+import { gql } from 'apollo-boost';
+import { useMutation } from '@apollo/react-hooks'
 import appAxios from '../config/appAxios';
+
+const OWNER_LOGIN = gql`
+    mutation ownerLogin($email: String!, $password: String!){
+        ownerLogin(
+            email: $email,
+            password: $password
+        ) {
+            token
+            user{
+                id
+                name
+                email
+            }
+        }
+    }
+
+`
 
 const OwnerLogin = (props) => {
     const dispatch = useDispatch()
@@ -12,47 +31,60 @@ const OwnerLogin = (props) => {
     const [status, setStatus] = useState({
         redirectRefs: props.state || false,
     });
-    const [form, setForm] = useState({
-        email: '',
-        password: '',
-    });
+    
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+
+    const [loginOwner] = useMutation(OWNER_LOGIN)
+
+    const submitForm = async (e) => {
+        e.preventDefault()
+        const feedback = await loginOwner({
+            variables: {
+                email,
+                password
+            }
+        })
+        const loginFeedback = feedback.data.ownerLogin
+        await dispatch(ownerLogin(loginFeedback))
+    }
 
     useEffect(() => {
         dispatch(clearError())
         // console.log('isLoading is now:', isLoading)
     }, [user.isAuthenticated]);
 
-    const formChange = (e) => {
-        e.persist()
-        setForm((prevState) => {
-            return { ...prevState, [e.target.name] : e.target.value }
-        })
-    };
+    // const formChange = (e) => {
+    //     e.persist()
+    //     setForm((prevState) => {
+    //         return { ...prevState, [e.target.name] : e.target.value }
+    //     })
+    // };
 
-    const submitForm = async (e) => {
-        e.preventDefault()
-        setIsLoading(true)
-        console.log('Form submit:', form)
-        appAxios({
-            method: 'POST',
-            url: '/owner/login',
-            data: form,
-        })
-        .then(({data}) => {
-            console.log('Login successful!', data)
-            return dispatch(ownerLogin(data))
-        })
-        .then(() => {
-            console.log('Data has been dispatched!')
-            setStatus({ redirectRefs: true })
-            setIsLoading(false)
-        })
-        .catch((err) => {
-            console.log('Login failed!', err.response)
-            dispatch(userError(err.response.data))
-            setIsLoading(false)
-        })
-    }
+    // const submitForm = async (e) => {
+    //     e.preventDefault()
+    //     setIsLoading(true)
+    //     console.log('Form submit:', form)
+    //     appAxios({
+    //         method: 'POST',
+    //         url: '/owner/login',
+    //         data: form,
+    //     })
+    //     .then(({data}) => {
+    //         console.log('Login successful!', data)
+    //         return dispatch(ownerLogin(data))
+    //     })
+    //     .then(() => {
+    //         console.log('Data has been dispatched!')
+    //         setStatus({ redirectRefs: true })
+    //         setIsLoading(false)
+    //     })
+    //     .catch((err) => {
+    //         console.log('Login failed!', err.response)
+    //         dispatch(userError(err.response.data))
+    //         setIsLoading(false)
+    //     })
+    // }
 
     if (isLoading) {
         return <h1>Loading...</h1>
@@ -74,16 +106,16 @@ const OwnerLogin = (props) => {
                 ? <p>You must log in to view this page</p>
                 : ''
                 }
-                <form onSubmit={submitForm}>
+                <form onSubmit={(e) => submitForm(e)}>
                     <table>
                         <tbody>
                             <tr>
                                 <td>Email</td>
-                                <td><input type="text" name="email" onChange={formChange} /></td>
+                                <td><input type="text" name="email" onChange={(e) => setEmail(e.target.value)} /></td>
                             </tr>
                             <tr>
                                 <td>Password</td>
-                                <td><input type="password" name="password" onChange={formChange} /></td>
+                                <td><input type="password" name="password" onChange={(e) => setPassword(e.target.value)} /></td>
                             </tr>
                             <tr>
                                 <td></td>
