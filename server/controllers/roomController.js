@@ -1,30 +1,38 @@
-const {Room} = require('../models')
+const { Room } = require('../models')
 
 class RoomController {
     static async getAllRoom (req,res,next) {
-        rooms = await Room.findAll()
-        res.status(200).json(rooms)
+        try {
+            const rooms = await Room.findAll()
+            res.status(200).json(rooms)
+        } catch (err) {  
+            next(err)
+        }
     }
 
     static async getOneRoom (req,res,next) {
         try {
             let id = Number(req.params.RoomId)
-            rooms = await Room.findAll({where: {id}})
+            const rooms = await Room.findOne({where: {id}})
             res.status(200).json(rooms)
         } catch (err) {
             next(err)
         }
     }
     static async addRoom (req,res,next) {
+        if (req.userData.role) {
+            next({status:400, message:'You are not authorized'})
+        }
+        const { BuildingId } = req.params
         try {
             let {
                 price,
-                BuildingId,
                 ac,
                 bathroom,
                 carPort,
                 laundry,
-                gender
+                gender,
+                date_occupied
             } = req.body
             let newRoom = await Room.create({
                 price,
@@ -33,17 +41,25 @@ class RoomController {
                 bathroom,
                 carPort,
                 laundry,
-                gender})
-            res.status(201).json({message:'successfully create new room', room:newRoom })
+                gender,
+                date_occupied
+            })
+            res.status(201).json('successfully create new room')
         } catch (err) {
             next(err)
         }
     }
     static async deleteRoom(req,res,next){
+        if (req.userData.role) {
+            next({status:400, message:'You are not authorized'})
+        }
         try {
             const {RoomId} = req.params
-            await Room.destory({where: {id:RoomId}})
-            res.status(200).json({message: 'room has been deleted succesfully'})
+            const success = await Room.destroy({where: {id:RoomId}})
+            if (success == 1) {
+                res.status(200).json('room has been deleted succesfully')
+            }
+            next({status:404, message:'Something wrong!'})
         } catch (err) {
             next(err)
         }
