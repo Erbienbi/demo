@@ -247,7 +247,6 @@ const resolver = {
         postRoom: async (_, args) => {
             const { token, BuildingId, price, ac, bathroom, carPort, laundry, gender, image } = args
             const newRoom = { price, ac, bathroom, carPort, laundry, gender, image }
-
             const { data } = await axios({
                 method:'POST',
                 url:`${ERBIENBI_SERVER}/room/${BuildingId}`,
