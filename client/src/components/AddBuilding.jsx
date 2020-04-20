@@ -130,7 +130,7 @@ export default (props) => {
     return (
       <>
         <Button variant="primary" onClick={handleShow}>
-          Launch demo modal
+          Add Building
         </Button>
 
         <Modal show={show} onHide={handleClose}>

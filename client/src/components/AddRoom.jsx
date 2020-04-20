@@ -136,7 +136,7 @@ export default (props) => {
     return (
       <>
         <Button variant="primary" onClick={handleShow}>
-          Launch demo modal
+          Add Room
         </Button>
 
         <Modal show={show} onHide={handleClose}>
