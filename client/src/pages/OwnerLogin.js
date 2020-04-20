@@ -49,7 +49,7 @@ const OwnerLogin = (props) => {
         })
         .catch((err) => {
             console.log('Login failed!', err.response)
-            dispatch(userError(err.response.data))
+            dispatch(userError(err.response))
             setIsLoading(false)
         })
     }
