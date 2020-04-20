@@ -32,7 +32,8 @@ class RoomController {
                 carPort,
                 laundry,
                 gender,
-                date_occupied
+                date_occupied,
+                image
             } = req.body
             let newRoom = await Room.create({
                 price,
@@ -42,7 +43,8 @@ class RoomController {
                 carPort,
                 laundry,
                 gender,
-                date_occupied
+                date_occupied,
+                image
             })
             res.status(201).json('successfully create new room')
         } catch (err) {

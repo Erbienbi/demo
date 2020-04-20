@@ -28,6 +28,15 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'Please insert coordinate'
         }
       }
+    },
+    image: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: 'Please upload your building image'
+        }
+      }
     }
   }, {});
   Building.associate = function(models) {

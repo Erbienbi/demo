@@ -16,7 +16,16 @@ module.exports = (sequelize, DataTypes) => {
     carPort: DataTypes.BOOLEAN,
     laundry: DataTypes.BOOLEAN,
     gender: DataTypes.STRING,
-    date_occupied: DataTypes.DATE
+    date_occupied: DataTypes.DATE,
+    image: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: 'Please upload your building image'
+        }
+      }
+    }
   }, {});
   Room.associate = function(models) {
     // associations can be defined here

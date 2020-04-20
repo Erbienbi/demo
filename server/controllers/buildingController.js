@@ -15,14 +15,14 @@ class BuldingController {
         if (req.userData.role) {
             next({status: 404, message:'You are not authorized'})
         }
-        console.log(req.userData)
         try {
-            const { area, address, coordinate } = req.body
+            const { area, address, coordinate, image } = req.body
             const addNewBuilding = await Building.create({
                 area,
                 address,
                 coordinate,
-                OwnerId: req.userData.id
+                OwnerId: req.userData.id,
+                image
             })
             res.status(201).json('Added new building')
         } catch (err) {
