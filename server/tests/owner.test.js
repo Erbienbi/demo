@@ -16,7 +16,7 @@ describe('Endpoints owner/register', () => {
         ktp: "101112131415"
       })
     expect(res.status).toEqual(201)
-    expect(res.body.message).toBe('Successfully registered new Owner')
+    expect(res.body).toBe('Successfully registered new Owner')
   })
   // NAME Null
   it('status code 400 Name Null', async () => {
