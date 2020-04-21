@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 export default (props) => {
   const {
     id,
+    name,
     OwnerId,
     area,
     address,
@@ -20,7 +21,7 @@ export default (props) => {
             <Card.Img variant="top" src={image} />
             <Card.Body>
               <Card.Title>
-                Koi Residence
+                {name}
               </Card.Title>
               <div className="my-1">
                 <h6>{area}</h6>
