@@ -48,7 +48,6 @@ export default (props) => {
           password
         }
       })
-      console.log('Hmmm')
       const loginFeedback = feedback.data.userLogin
       await dispatch(login(loginFeedback))
     } catch (err) {

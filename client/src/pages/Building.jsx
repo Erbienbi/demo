@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import { useQuery } from "@apollo/react-hooks";
 import { useSelector } from "react-redux";
+import { Card } from "react-bootstrap";
 import { gql } from "apollo-boost";
-import { Link } from "react-router-dom";
-import { Card, Form, Button } from "react-bootstrap";
+import { useQuery } from "@apollo/react-hooks";
+
 import Room from "../components/Room";
 import BuildingDetail from "../components/BuildingDetail";
 import EditBuilding from "../components/EditBuilding";
-import AddRoom from '../components/AddRoom'
+import AddRoom from '../components/AddRoom';
+
 const GET_ONE_BUILDING = gql`
   query getOneBuilding($id: Int!) {
     getOneBuilding(id: $id) {
@@ -73,15 +74,17 @@ export default (props) => {
               className="mt-1 shadow-sm pt-3 px-2 pb-3 w-100"
               style={{ borderRadius: "0.5rem" }}
             >
-              <div className="d-flex justify-content-end px-3">
-                <span>Have a room to rent?</span>
-                {/* <Button onClick={() => props.history.push("/add-room")}>
-                  Add Room
-                </Button> */}
+              {user.isOwner
+              ? <div className="d-flex justify-content-end px-3">
+                  <span>Punya kamar untuk disewakan?</span>
+                  {/* <Button onClick={() => props.history.push("/add-room")}>
+                    Add Room
+                  </Button> */}
 
-                <AddRoom id={BuildingId} />
-              
-              </div>
+                  <AddRoom id={BuildingId} />
+                </div>
+              : ''
+            }
               <hr />
               <div className="row">
                 {data.getOneBuilding.Rooms && data.getOneBuilding.Rooms.map((room) => {
