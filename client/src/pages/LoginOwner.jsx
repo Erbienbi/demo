@@ -27,23 +27,41 @@ export default (props) => {
   const [status, setStatus] = useState({
     redirectRefs: props.state || false,
   });
+
+  const [form, setForm] = useState({
+    email: '',
+    password: '',
+  });
     
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const formChange = (e) => {
+    e.persist()
+    setForm((prevState) => {
+      return { ...prevState, [e.target.name] : e.target.value }
+    })
+  };
 
   const [loginOwner] = useMutation(OWNER_LOGIN)
 
   const submitForm = async (e) => {
     e.preventDefault()
-    const feedback = await loginOwner({
-      variables: {
-        email,
-        password
-      }
-    })
-    const loginFeedback = feedback.data.ownerLogin
-    await dispatch(ownerLogin(loginFeedback))
-    setStatus({ redirectRefs: true })
+    setIsLoading(true)
+    let {email, password} = form
+    try {
+      const feedback = await loginOwner({
+        variables: {
+          email,
+          password
+        }
+      })
+      const loginFeedback = feedback.data.ownerLogin
+      await dispatch(ownerLogin(loginFeedback))
+      setStatus({ redirectRefs: true })
+      setIsLoading(false)
+    } catch (err) {
+      console.log('Error here', err)
+      // await dispatch(userError(err.response.data))
+      setIsLoading(false)
+    }
   }
 
   useEffect(() => {
@@ -89,13 +107,14 @@ export default (props) => {
               ) : (
                 ""
               )}
-              <Form onSubmit={(e) => submitForm(e)}>
+              <Form>
                 <Form.Group>
                   <Form.Label>Email address</Form.Label>
                   <Form.Control
                     type="email"
                     placeholder="Enter email"
-                    onChange={(e) => setEmail(e.target.value)}
+                    name="email"
+                    onChange={formChange}
                   />
                   <Form.Text className="text-muted">
                     We'll never share your email with anyone else.
@@ -107,11 +126,12 @@ export default (props) => {
                   <Form.Control
                     type="password"
                     placeholder="Password"
-                    onChange={(e) => setPassword(e.target.value)}
+                    name="password"
+                    onChange={formChange}
                   />
                 </Form.Group>
                 <div className="text-center">
-                  <Button variant="info" type="submit" className="mt-5">
+                  <Button variant="info" type="submit" className="mt-5" onClick={submitForm}>
                     Login
                   </Button>
                 </div>
