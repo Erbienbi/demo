@@ -10,6 +10,7 @@ import { Card } from "react-bootstrap";
 import CardComponent from "../components/Card";
 import FilterComponent from "../components/Filter"
 import AddBuilding from "../components/AddBuilding"
+import axios from 'axios'
 
 const GET_ALL_BUILDING = gql`
   query {
@@ -37,6 +38,7 @@ const GET_ALL_BUILDING = gql`
     }
   }
 `;
+
 
 export default () => {
   const dispatch = useDispatch();
