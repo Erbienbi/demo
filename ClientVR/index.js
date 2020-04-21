@@ -7,7 +7,8 @@ import {
   NativeModules,
   localStorage,
   VrButton,
-  Environment
+  Environment,
+  Image
 } from 'react-360';
 
 const formatter = new Intl.NumberFormat('id-ID', {
@@ -31,15 +32,17 @@ export default class ClientVR extends React.Component {
       facilities: ['ac', 'bathroom'],
       isLoading: true,
       img: 'https://video.360cities.net/digitalstudio/01622412_Liberty2018-1024x512.jpg',
-      rooms: ['https://www.arch2o.com/wp-content/uploads/2016/06/Arch2O-360-Photos01.jpg', 'https://i0.wp.com/hitsbanget.com/wp-content/uploads/2018/12/facebook-360images_header3-724x380.jpg?fit=724%2C380&ssl=1&resize=1280%2C720'],
+      rooms: ['https://www.arch2o.com/wp-content/uploads/2016/06/Arch2O-360-Photos01.jpg',
+             'https://i0.wp.com/hitsbanget.com/wp-content/uploads/2018/12/facebook-360images_header3-724x380.jpg?fit=724%2C380&ssl=1&resize=1280%2C720', 
+             'https://www.arch2o.com/wp-content/uploads/2016/06/Arch2O-360-Photos01.jpg'],
       limit: 2,
       start: 0,
-      listsRoom: false
+      current:0,
+      listsRoom: true,
     }
   }
 
   fetchData = async () => {
-    console.log(456)
     let server = ''
     try {
       const options = {
@@ -83,8 +86,11 @@ export default class ClientVR extends React.Component {
     console.log('successfully feching data from server')
   }
 
-  listsRoom() {
-    console.log(this.state)
+  changeBG(uri) {
+    Environment.setBackgroundImage({ uri: `https://cors-anywhere.herokuapp.com/${uri}` })
+  }
+
+  showOtherRooms = () => {
     this.setState({ listsRoom: !this.state.listsRoom })
   }
 
@@ -114,16 +120,19 @@ export default class ClientVR extends React.Component {
             </View>}
           <VrButton
             style={styles.book}
-            onClick={this.listsRoom}>
+            onClick={this.showOtherRooms}>
             <Text>
               Show Other Rooms
             </Text>
           </VrButton>
-          {this.state.listsRoom && <View>
-            {this.state.rooms.map(el =>
-              <Image source={el} style={{ width: 10, height: 10 }} />
+          {this.state.listsRoom && 
+          <View>
+            {this.state.rooms.map((el, index) =>
+              <VrButton key={index} onClick={() => this.changeBG(el)}>
+                <Image source={{ uri: `https://cors-anywhere.herokuapp.com/${el}` }} style={{ width: 200, height: 100 }} />
+              </VrButton>
             )}
-          </View>}
+          </View>} 
           <VrButton
             style={styles.book, { backgroundColor: 'red' }}
             onClick={this.back}>
