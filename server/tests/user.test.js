@@ -19,7 +19,7 @@ describe('Endpoints User/register', () => {
         password: '1234567'
       })
     expect(res.status).toEqual(201)
-    expect(res.body.message).toBe('Successfully registered new user')
+    expect(res.body).toBe('Successfully registered new user')
   })
   // NAME Null
   it('status code 400 Name Null', async () => {
