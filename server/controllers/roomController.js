@@ -70,7 +70,7 @@ class RoomController {
     }
 
     static async updateRoom (req,res,next){
-        const { BuildingId, RoomId } = req.params
+        const { RoomId } = req.params
         const userId = req.userData.id
         const { date_occupied } = req.body
         const updateData = {
