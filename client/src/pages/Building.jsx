@@ -64,9 +64,9 @@ export default (props) => {
               className="mt-1 shadow-sm p-4 w-100"
               style={{ borderRadius: "0.5rem" }}
             >
-              <div className="text-right">
+              {/* <div className="text-right">
                 <EditBuilding building={data.getOneBuilding} />
-              </div>
+              </div> */}
               <hr />
               <BuildingDetail building={data.getOneBuilding} />
             </Card>
@@ -87,8 +87,8 @@ export default (props) => {
             }
               <hr />
               <div className="row">
-                {data.getOneBuilding.Rooms && data.getOneBuilding.Rooms.map((room) => {
-                  return <Room room={room} key={room.id} />;
+                {data.getOneBuilding.Rooms && data.getOneBuilding.Rooms.map((room, idx) => {
+                  return <Room room={room} key={room.id} num={idx} />;
                 })}
               </div>
             </Card>

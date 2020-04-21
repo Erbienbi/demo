@@ -4,6 +4,7 @@ import { useMutation } from "@apollo/react-hooks";
 import { useSelector } from "react-redux";
 import { gql } from "apollo-boost";
 import { Card, Form, Button } from "react-bootstrap";
+import Swal from 'sweetalert2'
 
 const CONFIRM_PAYMENT = gql`
     mutation postRoom(
@@ -23,22 +24,59 @@ const CONFIRM_PAYMENT = gql`
     }
 `
 
+// updateRoom(
+//   date_occupied: String!
+//   BuildingId: Int!
+//   RoomId: Int!
+//   token: String!
+// ) : Message
+
+const UPDATE_ROOM = gql `
+    mutation updateRoom(
+        $token: String!
+        $RoomId: Int!
+        $date_occupied: String!
+      ) {
+        updateRoom(
+          token:$token
+          RoomId:$RoomId
+          date_occupied: $date_occupied
+        ) {
+          message
+        }
+      }
+`
+
 export default (props) => {
   const location = useLocation();
   const [isLoading, setIsLoading] = useState(false);
   const user = useSelector((state) => state.user);
   const [addRoom] = useMutation(CONFIRM_PAYMENT)
+  const [date, setDate] = useState('')
 
-  const bookRoom = () => {
+  const [updateRoom] = useMutation(UPDATE_ROOM)
+
+  const bookRoom = async () => {
     let today = new Date();
     console.log('Date from new date:', JSON.stringify(today))
     const dd = String(today.getDate()).padStart(2, '0');
     const mm = String(today.getMonth() + 1).padStart(2, '0');
     const yyyy = today.getFullYear();
     today = mm + '/' + dd + '/' + yyyy;
-
     console.log('Today is:', today)
-    console.log('Transferred data:', location.state)
+    console.log('Transferred data:', user)
+    console.log(location.state, 'data dari state')
+    await updateRoom({
+      variables: {
+        token: localStorage.token,
+        RoomId: location.state.id,
+        date_occupied: today
+      }
+    })
+    Swal.fire({
+      icon: 'success',
+      text: 'Thank you for choosing us'
+    })
   }
 
   const formatter = new Intl.NumberFormat('en-US', {
@@ -64,9 +102,9 @@ export default (props) => {
                       <p>
                       <b>Detail</b>: {location.state.id
                           ? <>
-                              <b>ID kamar</b>: {location.state.id}
-                              <b>Bangunan</b>: {location.state.BuildingId}
-                              <b>Harga</b>: {formatter.format(location.state.price)}
+                              <b>ID kamar</b>: {location.state.id} <br></br>
+                              <b>Bangunan</b>: {location.state.BuildingId} <br></br>
+                              <b>Harga</b>: {formatter.format(location.state.price)} <br></br>
                               <Button onClick={bookRoom}>Konfirmasi Pembayaran</Button>
                             </>
                           : <>
