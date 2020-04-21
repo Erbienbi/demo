@@ -10,10 +10,10 @@ import appAxios from './config/appAxios';
 // Pages //
 import Home from './pages/Home';
 // import UserLogin from './pages/UserLogin';
-import UserRegister from './pages/UserRegister';
+// import UserRegister from './pages/UserRegister';
 import Profile from './pages/Profile';
 // import OwnerLogin from './pages/OwnerLogin';
-import OwnerRegister from './pages/OwnerRegister';
+// import OwnerRegister from './pages/OwnerRegister';
 import BuildingList from './pages/BuildingList';
 import BuildingDetail from './pages/BuildingDetail';
 import AddBuilding from './pages/AddBuilding';
@@ -29,6 +29,8 @@ import HomePage from './pages/Home.jsx'
 import BuildingPage from "./pages/Building.jsx";
 import UserLogin from "./pages/LoginUser";
 import OwnerLogin from "./pages/LoginOwner";
+import UserRegister from "./pages/RegisterUser";
+import OwnerRegister from "./pages/RegisterOwner";
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const isAuthenticated = useSelector(state => state.user.authenticated)

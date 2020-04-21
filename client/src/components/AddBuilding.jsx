@@ -147,16 +147,15 @@ export default (props) => {
   } else {
     return (
       <>
-        <Button variant="primary" onClick={handleShow}>
-          Add Building
+        <Button variant="dark" onClick={handleShow}>
+          Daftarkan Rumah Saya!
         </Button>
         <Modal show={show} onHide={handleClose}>
           <Modal.Header closeButton>
-            <Modal.Title>Modal heading</Modal.Title>
+            <Modal.Title>Registrasi Rumah</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <div>
-              <h1>Add Building</h1>
               {building.error ? <p>{JSON.stringify(building.error)}</p> : ""}
               <form
                 onSubmit={(e) => submitForm(e)}
@@ -165,17 +164,7 @@ export default (props) => {
                 <table>
                   <tbody>
                     <tr>
-                      <td>Name</td>
-                      <td>
-                        <input
-                          type="text"
-                          name="name"
-                          onChange={(e) => setName(e.target.value)}
-                        />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Area</td>
+                      <td>Wilayah</td>
                       <td>
                         <input
                           type="text"
@@ -185,7 +174,7 @@ export default (props) => {
                       </td>
                     </tr>
                     <tr>
-                      <td>Address</td>
+                      <td>Alamat</td>
                       <td>
                         <input
                           type="text"
@@ -195,7 +184,7 @@ export default (props) => {
                       </td>
                     </tr>
                     <tr>
-                      <td>Coordinate (insert Google Map here)</td>
+                      <td>Titik Peta (insert Google Map here)</td>
                       <td>
                         <input
                           type="text"
@@ -206,35 +195,30 @@ export default (props) => {
                     </tr>
                     <tr>
                       <td>
-                        Building Image (select one):
+                        Foto Rumah
                         <input
                           type="file"
                           name="image"
                           onChange={(e) => setImage(e.target.files[0])}
                         />
                       </td>
-                      {/* <td><input type="text" name="image" onChange={formChange} /></td> */}
                     </tr>
                     <tr>
                       <td></td>
                       <td>
-                        <input type="submit" value="Add Host Building" />
+                        <input type="submit" value="Daftarkan!" />
                       </td>
                     </tr>
                   </tbody>
                 </table>
               </form>
-              <span>Return to building list</span>
-              <button onClick={() => props.history.push("/building")}>
-                Go back
-              </button>
             </div>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleClose}>
               Close
             </Button>
-            <Button variant="primary" onClick={handleClose}>
+            <Button variant="success" onClick={handleClose}>
               Save Changes
             </Button>
           </Modal.Footer>

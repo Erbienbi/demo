@@ -93,10 +93,10 @@ export default (props) => {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const user = useSelector((state) => state.user);
+  console.log(user, 'a;ldskas;ldkas')
   // const { error, loading, data } = useQuery(GET_ALL_BUILDING);
   // const building = useSelector(state => state.building.allBuildings)
 
@@ -111,7 +111,6 @@ export default (props) => {
   const [image, setImage] = useState("");
 
   const [clean] = useMutation(CLEAN)
-
     const { error, loading, data, refetch } = useQuery(GET_ONE_BUILDING, {
       variables: {
         id: Number(props.id),
@@ -154,9 +153,10 @@ export default (props) => {
   } else {
     return (
       <>
-        <Button variant="primary" onClick={handleShow}>
+        {user.isOwner && <Button variant="primary" onClick={handleShow}>
           Add Room
-        </Button>
+        </Button>}
+        
 
         <Modal show={show} onHide={handleClose}>
           <Modal.Header closeButton>
