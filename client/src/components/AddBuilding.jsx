@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { buildingError, clearError } from '../slices/buildingSlice';
 import appAxios from '../config/appAxios';
 import { gql } from 'apollo-boost'
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation, useQuery } from '@apollo/react-hooks'
 import { Modal, Button } from 'react-bootstrap'
 import axios from 'axios'
 const ADD_NEW_BUILDING = gql`
@@ -91,6 +91,7 @@ export default (props) => {
   const [address, setAddress] = useState('')
   const [coordinate, setCoordinate] = useState('')
   const [image, setImage] = useState('')
+  const { error, loading, data, refetch } = useQuery(GET_ALL_BUILDING);
   const [clean] = useMutation(CLEAN, {
     refetchQueries: [
       { query: GET_ALL_BUILDING }
@@ -115,7 +116,7 @@ export default (props) => {
       data: formData
     })
     // // const {}
-    const addNewBuilding = await clean({
+    await clean({
       variables: {
         token: 'asdasdasd'
       }

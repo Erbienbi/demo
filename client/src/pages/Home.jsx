@@ -44,7 +44,7 @@ export default () => {
   console.log(isOwner)
   const [isLoading, setIsLoading] = useState(true);
   const building = useSelector((state) => state.building);
-  const { error, loading, data } = useQuery(GET_ALL_BUILDING);
+  const { error, loading, data, refetch } = useQuery(GET_ALL_BUILDING);
 
   useEffect(() => {
     if (data) {

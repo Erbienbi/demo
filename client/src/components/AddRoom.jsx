@@ -6,9 +6,10 @@ import { roomError, clearError } from '../slices/roomSlice';
 import { gql } from 'apollo-boost';
 import appAxios from '../config/appAxios';
 import { Modal, Button } from 'react-bootstrap'
+import axios from 'axios'
 
 const GET_ONE_BUILDING = gql`
-  query getOneBuilding($id: Int!) {
+  query getOneBuilding($id: Int) {
     getOneBuilding(id: $id) {
       id
       OwnerId
@@ -32,6 +33,18 @@ const GET_ONE_BUILDING = gql`
     }
   }
 `;
+
+const CLEAN = gql`
+    mutation clean(
+      $token: String
+    ) {
+      clean(
+        token:$token
+      ) {
+        message
+      }
+    }
+`
 
 const GET_ALL_BUILDING = gql`
     query {
@@ -76,6 +89,7 @@ const ADD_NEW_ROOM = gql `
     `
 
 export default (props) => {
+  console.log(props.id)
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -96,11 +110,7 @@ export default (props) => {
   const [gender, setGender] = useState('')
   const [image, setImage] = useState("");
 
-  const [addRoom] = useMutation(ADD_NEW_ROOM, {
-    refetchQueries: [
-      { query: GET_ALL_BUILDING }
-    ]
-  })
+  const [clean] = useMutation(CLEAN)
 
     const { error, loading, data, refetch } = useQuery(GET_ONE_BUILDING, {
       variables: {
@@ -108,29 +118,38 @@ export default (props) => {
       },
     });
 
+  
   const submitForm = async (e) => {
     e.preventDefault()
+    // console.log(price, ac, bathroom, laundry, carPort, gender, image)
     // setIsLoading(true)
-    const addNewRoom = await addRoom({
+    const token = localStorage.owner_token
+    let formData = new FormData();
+    formData.append("price", price)
+    formData.append("ac", ac);
+    formData.append("bathroom", bathroom);
+    formData.append("carPort", carPort);
+    formData.append("laundry", laundry);
+    formData.append("image", image)
+    formData.append("gender", gender)
+    // console.log(area, address, coordinate, token)
+    const z = await axios({
+      method: 'POST',
+      url: `http://localhost:3000/room/${Number(props.id)}`,
+      headers: {token:token},
+      data: formData
+    })
+    const addNewRoom = await clean({
       variables: {
-        token: localStorage.owner_token,
-        BuildingId: Number(props.id),
-        ac,
-        bathroom,
-        price,
-        laundry,
-        carPort,
-        gender,
-        image
+        token: 'asdasdasd'
       }
     })
-    console.log(addNewRoom)
     await refetch()
   }
 
-  if (loading) {
-    return <h1>Loading...</h1>
-  } else if (isLoading) {
+  // if (loading) {
+  //   return <h1>Loading...</h1>
+  if (isLoading) {
     return <h1>Loading...</h1>
   } else {
     return (
@@ -147,172 +166,130 @@ export default (props) => {
             <div>
               <h1>Add Room</h1>
               {room.error ? <p>{JSON.stringify(room.error)}</p> : ""}
-              <form onSubmit={(e) => submitForm(e)}>
-                <table>
-                  <tbody>
-                    <tr>
-                      <td>Select Building</td>
-                      {/* <td>
-                        <select name="BuildingId">
-                          <option disabled selected>
-                            Select one
-                          </option>
-
-                          {data &&
-                            data.getAllBuilding
-                              .filter((each) => each.OwnerId === user.id)
-                              .map((each) => (
-                                <option key={each.id} value={Number(each.id)}>
-                                  {each.area}
-                                </option>
-                              ))}
-                        </select>
-                      </td> */}
-                    </tr>
-                    <tr>
-                      <td>Rent Price</td>
-                      <td>
-                        <input
-                          type="number"
-                          name="price"
-                          onChange={(e) => setPrice(Number(e.target.value))}
-                        />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Air Conditioning?</td>
-                      <td>
-                        <input
-                          type="radio"
-                          name="ac"
-                          value="0"
-                          onChange={(e) => setAc(false)}
-                        />{" "}
-                        None
-                        <br />
-                        <input
-                          type="radio"
-                          name="ac"
-                          value="1"
-                          onChange={(e) => setAc(true)}
-                        />{" "}
-                        Available
-                        <br />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Bathroom</td>
-                      <td>
-                        <input
-                          type="radio"
-                          name="bathroom"
-                          value="0"
-                          onChange={(e) => setBathroom(false)}
-                        />{" "}
-                        Outside
-                        <br />
-                        <input
-                          type="radio"
-                          name="bathroom"
-                          value="1"
-                          onChange={(e) => setBathroom(true)}
-                        />{" "}
-                        Inside
-                        <br />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Laundry Service</td>
-                      <td>
-                        <input
-                          type="radio"
-                          name="laundry"
-                          value="0"
-                          onChange={(e) => setLaundry(false)}
-                        />{" "}
-                        None
-                        <br />
-                        <input
-                          type="radio"
-                          name="laundry"
-                          value="1"
-                          onChange={(e) => setLaundry(true)}
-                        />{" "}
-                        Available
-                        <br />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Gender</td>
-                      <td>
-                        <input
-                          type="radio"
-                          name="gender"
-                          value="male"
-                          onChange={(e) => setGender("male")}
-                        />{" "}
-                        Male-Only
-                        <br />
-                        <input
-                          type="radio"
-                          name="gender"
-                          value="female"
-                          onChange={(e) => setGender("female")}
-                        />{" "}
-                        Female-Only
-                        <br />
-                        <input
-                          type="radio"
-                          name="gender"
-                          value="mixed"
-                          onChange={(e) => setGender("mix")}
-                        />{" "}
-                        No Restriction
-                        <br />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Car Parking</td>
-                      <td>
-                        <input
-                          type="radio"
-                          name="carPort"
-                          value="0"
-                          onChange={(e) => setcarPort(false)}
-                        />{" "}
-                        None
-                        <br />
-                        <input
-                          type="radio"
-                          name="carPort"
-                          value="1"
-                          onChange={(e) => setcarPort(true)}
-                        />{" "}
-                        Available
-                        <br />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        Room Image (select one):
-                        <input type="file" name="image" />
-                      </td>
-                      <td>
-                        <input
-                          type="text"
-                          name="image"
-                          onChange={(e) => setImage(e.target.value)}
-                        />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td>
-                        <input type="submit" value="Add Room" />
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+              <form onSubmit={(e) => submitForm(e)} encType="multipart/form-data">
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Rent price / month</label>
+                  <input type="number" class="form-control" onChange={(e) => setPrice(Number(e.target.value))}/>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputPassword1">AC</label>
+                  <div class="custom-control custom-radio custom-control-inline">
+                    <input
+                      type="radio"
+                      name="ac"
+                      value="0"
+                      onChange={(e) => setAc(false)}
+                    />
+                    <label>None</label> 
+                  </div>
+                  <div class="custom-control custom-radio custom-control-inline">
+                  <input
+                      type="radio"
+                      name="ac"
+                      value="0"
+                      onChange={(e) => setAc(true)}
+                    />
+                    <label>Availble</label>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputPassword1">Bathroom</label>
+                  <div class="custom-control custom-radio custom-control-inline">
+                    <input
+                      type="radio"
+                      name="bathroom"
+                      value="0"
+                      onChange={(e) => setBathroom(false)}
+                    />
+                    <label>None</label> 
+                  </div>
+                  <div class="custom-control custom-radio custom-control-inline">
+                  <input
+                      type="radio"
+                      name="bathroom"
+                      value="0"
+                      onChange={(e) => setBathroom(true)}
+                    />
+                    <label>Availble</label>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputPassword1">Car Port</label>
+                  <div class="custom-control custom-radio custom-control-inline">
+                    <input
+                      type="radio"
+                      name="car"
+                      value="0"
+                      onChange={(e) => setcarPort(false)}
+                    />
+                    <label>None</label> 
+                  </div>
+                  <div class="custom-control custom-radio custom-control-inline">
+                  <input
+                      type="radio"
+                      name="car"
+                      value="1"
+                      onChange={(e) => setcarPort(true)}
+                    />
+                    <label>Availble</label>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputPassword1">Laundry</label>
+                  <div class="custom-control custom-radio custom-control-inline">
+                    <input
+                      type="radio"
+                      name="laundry"
+                      value="0"
+                      onChange={(e) => setLaundry(false)}
+                    />
+                    <label>None</label> 
+                  </div>
+                  <div class="custom-control custom-radio custom-control-inline">
+                  <input
+                      type="radio"
+                      name="laundry"
+                      value="1"
+                      onChange={(e) => setLaundry(true)}
+                    />
+                    <label>Availble</label>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputPassword1">Gender</label>
+                  <div class="custom-control custom-radio custom-control-inline">
+                    <input
+                      type="radio"
+                      name="gender"
+                      value="0"
+                      onChange={(e) => setGender('Male')}
+                    />
+                    <label>Male</label> 
+                  </div>
+                  <div class="custom-control custom-radio custom-control-inline">
+                  <input
+                      type="radio"
+                      name="gender"
+                      value="1"
+                      onChange={(e) => setGender('Female')}
+                    />
+                    <label>Female</label>
+                  </div>
+                  <div class="custom-control custom-radio custom-control-inline">
+                  <input
+                      type="radio"
+                      name="gender"
+                      value="2"
+                      onChange={(e) => setGender('Mix')}
+                    />
+                    <label>Mix</label>
+                  </div>
+                  <div class="form-group">
+                  <input type="file" name="image" onChange={(e) => setImage(e.target.files[0])}/>
+                    <label>Image</label>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
               </form>
             </div>
           </Modal.Body>

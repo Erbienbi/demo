@@ -195,13 +195,16 @@ const resolver = {
     },
     Mutation: {
         clean: async (_, args) => {
-            console.log('ASLKASKJASLAKJS')
+            console.log('ASLKASKJASLAKJS asklaskl;aks;laks;ask;lk')
             const message = 'success'
             await redis.del("Buildings");
+            await redis.del("Rooms");
             const getAllBuilding = await axios.get(
               `${ERBIENBI_SERVER}/building`
             );
+            const getAllRooms = await axios.get(`${ERBIENBI_SERVER}/room`)
             await redis.set("Buildings", JSON.stringify(getAllBuilding.data));
+            await redis.set("Rooms", JSON.stringify(getAllRooms.data));
             return {message:message}
         },
         //posting new building (go through authentication as need token as the headers)

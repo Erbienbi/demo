@@ -23,7 +23,9 @@ class RoomController {
         if (req.userData.role) {
             next({status:400, message:'You are not authorized'})
         }
+        console.log(req.body, 'INI REQ BODY DI CONTROLLER')
         const { BuildingId } = req.params
+        console.log(BuildingId, 'INI ID DI CONTROLLER')
         try {
             let {
                 price,
@@ -32,7 +34,6 @@ class RoomController {
                 carPort,
                 laundry,
                 gender,
-                date_occupied,
                 image
             } = req.body
             let newRoom = await Room.create({
@@ -43,11 +44,12 @@ class RoomController {
                 carPort,
                 laundry,
                 gender,
-                date_occupied,
                 image
             })
+            console.log(newRoom)
             res.status(201).json('successfully create new room')
         } catch (err) {
+            console.log(err)
             next(err)
         }
     }

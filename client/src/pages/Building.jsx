@@ -84,8 +84,8 @@ export default (props) => {
               </div>
               <hr />
               <div className="row">
-                {data.getOneBuilding.Rooms && data.getOneBuilding.Rooms.map((room) => {
-                  return <Room room={room} key={room.id} />;
+                {data.getOneBuilding.Rooms && data.getOneBuilding.Rooms.map((room, idx) => {
+                  return <Room room={room} key={room.id} num={idx} />;
                 })}
               </div>
             </Card>
