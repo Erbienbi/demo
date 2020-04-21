@@ -44,14 +44,19 @@ const UserLogin = (props) => {
 
     const submitForm = async (e) => {
         e.preventDefault()
-        const feedback = await userLogin({
-            variables: {
-                email,
-                password
-            }
-        })
-        const loginFeedback = feedback.data.userLogin
-        await dispatch(login(loginFeedback))
+        try {
+            const feedback = await userLogin({
+                variables: {
+                    email,
+                    password
+                }
+            })
+            const loginFeedback = feedback.data.userLogin
+            await dispatch(login(loginFeedback))
+        } catch(err) {
+            console.log('Error here', err)
+            // await dispatch(userError(err.response.data))
+        }
     }
     // const formChange = (e) => {
     //     e.persist()

@@ -25,7 +25,11 @@ export default (props) => {
               <div className="my-1">
                 <h6>{area}</h6>
                 <em>{address}</em>
-                <Alert variant="success" style={{padding: "0px", marginTop: "5px"}}>Available {Rooms.length} rooms</Alert>
+                {
+                  Rooms
+                  ? <Alert variant="success" style={{padding: "0px", marginTop: "5px"}}>Available {Rooms.length} rooms</Alert>
+                  : <Alert variant="success" style={{padding: "0px", marginTop: "5px"}}>No room available</Alert>
+                }
               </div>
             </Card.Body>
           </Card>
