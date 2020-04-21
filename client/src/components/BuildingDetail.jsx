@@ -18,7 +18,7 @@ export default (props) => {
         <div className="my-1">
 
           <img src={image}></img>
-          <h4 class="text-dark">{name}</h4>
+          <h4 className="text-dark">{name}</h4>
           <div>{area}</div>
           <div>{address}</div>
         </div>

@@ -18,7 +18,7 @@ import BuildingList from './pages/BuildingList';
 import BuildingDetail from './pages/BuildingDetail';
 import AddBuilding from './pages/AddBuilding';
 import AddRoom from './pages/AddRoom';
-import RoomList from './pages/RoomList';
+// import RoomList from './pages/RoomList';
 import RoomDetail from './pages/RoomDetail';
 
 // TESTING COMPONENT
@@ -131,7 +131,7 @@ function App() {
             <Route path="/register-owner" component={OwnerRegister} />
             <Route path="/login-owner" component={OwnerLogin} />
 
-            <Route exact path="/room" component={RoomList} />
+            {/* <Route exact path="/room" component={RoomList} /> */}
             <Route exact path="/building" component={BuildingList} />
 
             <Route

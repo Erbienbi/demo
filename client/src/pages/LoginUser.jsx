@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { login, userError, clearError } from "../slices/userSlice";
 import { useMutation } from "@apollo/react-hooks";
 import { gql } from "apollo-boost";
-import appAxios from "../config/appAxios";
 import { Card, Form, Button} from "react-bootstrap";
+// import appAxios from "../config/appAxios";
 
 const USER_LOGIN = gql`
   mutation userLogin($email: String!, $password: String!) {
@@ -29,8 +29,10 @@ export default (props) => {
     redirectRefs: props.state || false,
   });
     
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [form, setForm] = useState({
+    email: '',
+    password: '',
+  });
 
   useEffect(() => {
     dispatch(clearError())
@@ -39,8 +41,17 @@ export default (props) => {
 
   const [userLogin] = useMutation(USER_LOGIN)
 
+  const formChange = (e) => {
+        e.persist()
+        setForm((prevState) => {
+            return { ...prevState, [e.target.name] : e.target.value }
+        })
+    };
+
   const submitForm = async (e) => {
     e.preventDefault()
+    setIsLoading(true)
+    let {email, password} = form
     try {
       const feedback = await userLogin({
         variables: {
@@ -50,28 +61,25 @@ export default (props) => {
       })
       const loginFeedback = feedback.data.userLogin
       await dispatch(login(loginFeedback))
+      setStatus({ redirectRefs: true })
+      setIsLoading(false)
     } catch (err) {
       console.log('Error here', err)
       // await dispatch(userError(err.response.data))
+      setIsLoading(false)
     }
   }
-
-  // const formChange = (e) => {
-  //     e.persist()
-  //     console.log(e.taget.value)
-  //     setForm((prevState) => {
-  //         return { ...prevState, [e.target.name] : e.target.value }
-  //     })
-  // };
 
   // const submitForm = async (e) => {
   //     e.preventDefault()
   //     setIsLoading(true)
-  //     console.log('Form submit:', form)
-  //     appAxios({
-  //         method: 'POST',
-  //         url: '/user/login',
-  //         data: form,
+  //     let {email, password} = form
+  //     console.log('Form submit:', email, password)
+  //     userLogin({
+  //       variables: {
+  //         email,
+  //         password
+  //       }
   //     })
   //     .then(({data}) => {
   //         return dispatch(login(data))
@@ -99,8 +107,6 @@ export default (props) => {
   } else {
     return (
       <>
-        {user.error ? <p>{JSON.stringify(user.error)}</p> : ""}
-        {props.location.state ? <p>You must log in to view this page</p> : ""}
         <div className="d-flex justify-content-center">
           <Card
             className="mt-5 p-4 shadow-sm  px-5"
@@ -115,13 +121,16 @@ export default (props) => {
               </Card>
             </div>
             <div className="mt-5">
-              <Form onSubmit={(e) => submitForm(e)}>
+            {user.error ? <p>{JSON.stringify(user.error)}</p> : ""}
+            {props.location.state ? <p>You must log in to view this page</p> : ""}
+              <Form>
                 <Form.Group>
                   <Form.Label>Email address</Form.Label>
                   <Form.Control
                     type="email"
                     placeholder="Enter email"
-                    onChange={(e) => setEmail(e.target.value)}
+                    name="email"
+                    onChange={formChange}
                   />
                   <Form.Text className="text-muted">
                     We'll never share your email with anyone else.
@@ -133,11 +142,12 @@ export default (props) => {
                   <Form.Control
                     type="password"
                     placeholder="Password"
-                    onChange={(e) => setPassword(e.target.value)}
+                    name="password"
+                    onChange={formChange}
                   />
                 </Form.Group>
                 <div className="text-center">
-                  <Button variant="info" type="submit" className="mt-5">
+                  <Button variant="info" type="submit" className="mt-5" onClick={submitForm}>
                     Login
                   </Button>
                 </div>
