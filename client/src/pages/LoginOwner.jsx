@@ -46,7 +46,6 @@ export default (props) => {
     e.preventDefault()
     setIsLoading(true)
     let {email, password} = form
-    console.log(email, password)
     try {
       const feedback = await loginOwner({
         variables: {
