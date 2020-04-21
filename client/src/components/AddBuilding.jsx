@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { buildingError, clearError } from '../slices/buildingSlice';
 import appAxios from '../config/appAxios';
 import { gql } from 'apollo-boost'
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation, useQuery } from '@apollo/react-hooks'
 import { Modal, Button } from 'react-bootstrap'
 import axios from 'axios'
 const ADD_NEW_BUILDING = gql`
@@ -91,6 +91,7 @@ export default (props) => {
   const [address, setAddress] = useState('')
   const [coordinate, setCoordinate] = useState('')
   const [image, setImage] = useState('')
+  const { error, loading, data, refetch } = useQuery(GET_ALL_BUILDING);
   const [clean] = useMutation(CLEAN, {
     refetchQueries: [
       { query: GET_ALL_BUILDING }
@@ -115,11 +116,12 @@ export default (props) => {
       data: formData
     })
     // // const {}
-    const addNewBuilding = await clean({
+    await clean({
       variables: {
         token: 'asdasdasd'
       }
     })
+    setShow(false)
     // setIsLoading(true)
     // console.log('Form submit:', form)
     // appAxios({
@@ -158,58 +160,70 @@ export default (props) => {
               {building.error ? <p>{JSON.stringify(building.error)}</p> : ""}
               <form
                 onSubmit={(e) => submitForm(e)}
-                enctype="multipart/form-data"
+                encType="multipart/form-data"
               >
-                <table>
-                  <tbody>
-                    <tr>
-                      <td>Wilayah</td>
-                      <td>
+                <>
+                  <>
+                    <div>
+                      <div>Name</div>
+                      <div>
+                        <input
+                          type="text"
+                          name="name"
+                          onChange={(e) => setName(e.target.value)}
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <div>Wilayah</div>
+                      <div>
                         <input
                           type="text"
                           name="area"
                           onChange={(e) => setArea(e.target.value)}
                         />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Alamat</td>
-                      <td>
+                      </div>
+                    </div>
+                    <div>
+                      <div>Alamat</div>
+                      <div>
                         <input
                           type="text"
                           name="address"
                           onChange={(e) => setAddress(e.target.value)}
                         />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Titik Peta (insert Google Map here)</td>
-                      <td>
+                      </div>
+                    </div>
+                    <div>
+                      <div>Titik Peta (insert Google Map here)</div>
+                      <div>
                         <input
                           type="text"
                           name="coordinate"
                           onChange={(e) => setCoordinate(e.target.value)}
                         />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
+                      </div>
+                    </div>
+                    <div>
+                      <div>
                         Foto Rumah
-                        <input
+                      </div>
+                      <div>
+                      <input
                           type="file"
                           name="image"
                           onChange={(e) => setImage(e.target.files[0])}
                         />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td>
+                      </div>
+                    </div>
+                    {/* <div>
+                      <div></div>
+                      <div>
                         <input type="submit" value="Daftarkan!" />
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+                      </div>
+                    </div> */}
+                  </>
+                </>
               </form>
             </div>
           </Modal.Body>
@@ -217,8 +231,8 @@ export default (props) => {
             <Button variant="secondary" onClick={handleClose}>
               Close
             </Button>
-            <Button variant="success" onClick={handleClose}>
-              Save Changes
+            <Button variant="success" onClick={(e) => submitForm(e)}>
+              Add Building
             </Button>
           </Modal.Footer>
         </Modal>

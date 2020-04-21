@@ -14,11 +14,11 @@ export default (props) => {
   } = props.building
   return (
     <>
-      <div className="mb-2 ">
+      <div className="mb-2 text-center">
         <div className="my-1">
 
-          <img src={image}></img>
-          <h4 class="text-dark">{name}</h4>
+          <img src={image} width="1000px" height="500px" className="rounded"></img>
+          <h4 class="text-dark mt-3">{name}</h4>
           <div>{area}</div>
           <div>{address}</div>
         </div>

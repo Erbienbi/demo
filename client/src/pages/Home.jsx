@@ -38,6 +38,7 @@ const GET_ALL_BUILDING = gql`
   }
 `;
 
+
 export default () => {
   const dispatch = useDispatch();
   const isOwner = useSelector((state) => state.user.isOwner);
@@ -48,6 +49,8 @@ export default () => {
     searchQuery: '',
     result: []
   })
+
+  
 
   useEffect(() => {
     if (data) {
