@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ownerLogin, userError, clearError } from '../slices/userSlice';
 import { gql } from 'apollo-boost';
 import { useMutation } from '@apollo/react-hooks'
-import appAxios from '../config/appAxios';
+// import appAxios from '../config/appAxios';
 
 const OWNER_LOGIN = gql`
     mutation ownerLogin($email: String!, $password: String!){

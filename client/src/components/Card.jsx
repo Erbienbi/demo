@@ -18,7 +18,7 @@ export default (props) => {
       <div className="col-3 mb-2 ">
         <Link key={id} to={`/building/${id}`} className="btn">
           <Card className="customeHover">
-            <Card.Img variant="top" src={image} />
+            <Card.Img variant="top" src={image} width='100px' height='150px' />
             <Card.Body>
               <Card.Title>
                 {name}
