@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 export default (props) => {
   const {
     id,
+    name,
     OwnerId,
     area,
     address,
@@ -17,7 +18,7 @@ export default (props) => {
         <div className="my-1">
 
           <img src={image}></img>
-          <h4 class="text-dark">Building Name</h4>
+          <h4 class="text-dark">{name}</h4>
           <div>{area}</div>
           <div>{address}</div>
         </div>

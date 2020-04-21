@@ -7,7 +7,8 @@ const router = express.Router()
 
 router.get('/', authentication, ownerController.getProfile)
 router.put('/', authentication, ownerController.updateProfile)
-router.post('/register', upload.single("file"), ownerController.register)
+router.post('/register', ownerController.register)
+// router.post("/register", upload.single("ktp"), ownerController.register);
 router.post('/login', ownerController.login)
 
 module.exports = router

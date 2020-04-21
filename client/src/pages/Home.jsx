@@ -15,6 +15,7 @@ const GET_ALL_BUILDING = gql`
   query {
     getAllBuilding {
       id
+      name
       OwnerId
       area
       address

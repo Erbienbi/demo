@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 export default (props) => {
   const {
     id,
+    name,
     OwnerId,
     area,
     address,
@@ -17,10 +18,10 @@ export default (props) => {
       <div className="col-3 mb-2 ">
         <Link key={id} to={`/building/${id}`} className="btn">
           <Card className="customeHover">
-            <Card.Img variant="top" src={image} />
+            <Card.Img variant="top" src={image} width='100px' height='150px' />
             <Card.Body>
               <Card.Title>
-                Koi Residence
+                {name}
               </Card.Title>
               <div className="my-1">
                 <h6>{area}</h6>

@@ -6,7 +6,7 @@ import appAxios from '../config/appAxios';
 import { gql } from 'apollo-boost'
 import { useMutation } from '@apollo/react-hooks'
 import { Modal, Button } from 'react-bootstrap'
-
+import axios from 'axios'
 const ADD_NEW_BUILDING = gql`
     mutation postBuilding(
         $token: String!
@@ -26,11 +26,22 @@ const ADD_NEW_BUILDING = gql`
         }
     }
 `;
-
+const CLEAN = gql`
+    mutation clean(
+      $token: String
+    ) {
+      clean(
+        token:$token
+      ) {
+        message
+      }
+    }
+`
 const GET_ALL_BUILDING = gql`
     query {
         getAllBuilding{
             id
+            name
             OwnerId
             area
             address
@@ -53,11 +64,8 @@ const GET_ALL_BUILDING = gql`
 `
 export default (props) => {
   const [show, setShow] = useState(false);
-
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
-
   const dispatch = useDispatch()
   const [isLoading, setIsLoading] = useState(false)
   const user = useSelector(state => state.user)
@@ -68,39 +76,48 @@ export default (props) => {
   //     coordinate: '',
   //     image: '',
   // });
-
   useEffect(() => {
     dispatch(clearError())
     // console.log('isLoading is now:', isLoading)
   }, []);
-
   // const formChange = (e) => {
   //     e.persist()
   //     setForm((prevState) => {
   //         return { ...prevState, [e.target.name] : e.target.value }
   //     })
   // };
-
   const [area, setArea] = useState('')
+  const [name, setName] = useState('')
   const [address, setAddress] = useState('')
   const [coordinate, setCoordinate] = useState('')
   const [image, setImage] = useState('')
-
-  const [postBuilding] = useMutation(ADD_NEW_BUILDING, {
+  const [clean] = useMutation(CLEAN, {
     refetchQueries: [
       { query: GET_ALL_BUILDING }
     ]
   })
-
   const submitForm = async (e) => {
+    console.log(image, 'image on submit')
     e.preventDefault()
-    const addNewBuilding = await postBuilding({
+    const token = localStorage.owner_token
+    let formData = new FormData();
+    formData.append("area", area);
+    formData.append("name", name);
+    formData.append("address", address);
+    formData.append("coordinate", coordinate);
+    formData.append("image", image)
+    formData.append("token", token);
+    // console.log(area, address, coordinate, token)
+    await axios({
+      method: 'POST',
+      url: 'http://localhost:3000/building',
+      headers: {token:localStorage.owner_token},
+      data: formData
+    })
+    // // const {}
+    const addNewBuilding = await clean({
       variables: {
-        area,
-        address,
-        coordinate,
-        image,
-        token: localStorage.owner_token
+        token: 'asdasdasd'
       }
     })
     // setIsLoading(true)
@@ -132,7 +149,6 @@ export default (props) => {
         <Button variant="dark" onClick={handleShow}>
           Daftarkan Rumah Saya!
         </Button>
-
         <Modal show={show} onHide={handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>Registrasi Rumah</Modal.Title>
@@ -140,7 +156,10 @@ export default (props) => {
           <Modal.Body>
             <div>
               {building.error ? <p>{JSON.stringify(building.error)}</p> : ""}
-              <form onSubmit={(e) => submitForm(e)}>
+              <form
+                onSubmit={(e) => submitForm(e)}
+                enctype="multipart/form-data"
+              >
                 <table>
                   <tbody>
                     <tr>
@@ -179,7 +198,7 @@ export default (props) => {
                         <input
                           type="file"
                           name="image"
-                          onChange={(e) => setImage(e.target.value)}
+                          onChange={(e) => setImage(e.target.files[0])}
                         />
                       </td>
                     </tr>
