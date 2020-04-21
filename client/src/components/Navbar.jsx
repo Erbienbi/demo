@@ -114,7 +114,7 @@ export default () => {
                   }
                 >
                   <NavDropdown.Item href="">
-                    <Link to="/profile" classNmae="btn">
+                    <Link to="/profile" className="btn">
                       Profile
                     </Link>
                   </NavDropdown.Item>
