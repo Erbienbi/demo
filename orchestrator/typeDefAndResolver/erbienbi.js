@@ -76,7 +76,6 @@ const schema = gql`
         ) : Message
         updateRoom(
             date_occupied: String!
-            BuildingId: Int!
             RoomId: Int!
             token: String!
         ) : Message
@@ -265,10 +264,11 @@ const resolver = {
         },
         //updating room once the user book and paid the room
         updateRoom: async (_, args) => {
-            const { date_occupied, RoomId, BuildingId, token } = args
+            console.log(args)
+            const { date_occupied, RoomId, token } = args
             const { data } = await axios({
                 method:'PUT',
-                url:`${ERBIENBI_SERVER}/room/${BuildingId}/${RoomId}`,
+                url:`${ERBIENBI_SERVER}/room/${RoomId}`,
                 headers: {token},
                 data: {
                     date_occupied
