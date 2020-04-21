@@ -30,7 +30,11 @@ export default class ClientVR extends React.Component {
       address: 'jl.wadidawcikidingding',
       facilities: ['ac', 'bathroom'],
       isLoading: true,
-      img: false
+      img: 'https://video.360cities.net/digitalstudio/01622412_Liberty2018-1024x512.jpg',
+      rooms: ['https://www.arch2o.com/wp-content/uploads/2016/06/Arch2O-360-Photos01.jpg', 'https://i0.wp.com/hitsbanget.com/wp-content/uploads/2018/12/facebook-360images_header3-724x380.jpg?fit=724%2C380&ssl=1&resize=1280%2C720'],
+      limit: 2,
+      start: 0,
+      listsRoom: false
     }
   }
 
@@ -49,11 +53,10 @@ export default class ClientVR extends React.Component {
       let data = await fetch(`${server}/${BuildingId}/${RoomId}`, options)
       let keys = Object.keys(data);
       let filtered = keys.filter(key => data[key])
-
+      console.log(data)
       this.setState({ facilities: filtered })
       this.setState({ price: data.price })
       this.setState({ image: data.image })
-
     } catch (error) {
       console.log(error, 'error')
     }
@@ -75,20 +78,14 @@ export default class ClientVR extends React.Component {
     // this.fetchData()
     this.setState({ isLoading: false })
     Environment.setBackgroundImage(
-      { uri: `https://cors-anywhere.herokuapp.com/${this.state.img || 'https://video.360cities.net/digitalstudio/01622412_Liberty2018-1024x512.jpg'}` }
+      { uri: `https://cors-anywhere.herokuapp.com/${this.state.img}` }
     )
     console.log('successfully feching data from server')
   }
 
-  bookRoom() {
-    // console.log(localStorage)
-    if (localStorage.getItem('token')) {
-      console.log('sukses booking')
-    } else {
-      console.log('masuk')
-      // window.open('http://localhost:3001')
-      console.log('ihiw')
-    }
+  listsRoom() {
+    console.log(this.state)
+    this.setState({ listsRoom: !this.state.listsRoom })
   }
 
   render() {
@@ -114,21 +111,25 @@ export default class ClientVR extends React.Component {
               <Text style={styles.details}>{`facilities: \n-` + this.state.facilities.join('\n -')}</Text>
               <Text style={styles.details}>Price: {formatter.format(this.state.price)}</Text>
               <Text style={styles.details}>{this.state.address}</Text>
-            </View>
-          }
+            </View>}
           <VrButton
             style={styles.book}
-            onClick={this.bookRoom}>
+            onClick={this.listsRoom}>
             <Text>
-              Book Now!
-    </Text>
+              Show Other Rooms
+            </Text>
           </VrButton>
+          {this.state.listsRoom && <View>
+            {this.state.rooms.map(el =>
+              <Image source={el} style={{ width: 10, height: 10 }} />
+            )}
+          </View>}
           <VrButton
             style={styles.book, { backgroundColor: 'red' }}
             onClick={this.back}>
             <Text>
               close
-    </Text>
+            </Text>
           </VrButton>
         </View>
         }
@@ -196,10 +197,5 @@ const styles = StyleSheet.create({
     fontSize: 0
   }
 });
-
-// const App = StackNavigator({
-//   Home: {screen:reactVR,
-//          path: 'room/:id'},
-// });
 
 AppRegistry.registerComponent('ClientVR', () => ClientVR);
