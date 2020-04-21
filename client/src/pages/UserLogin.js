@@ -51,6 +51,7 @@ const UserLogin = (props) => {
                     password
                 }
             })
+            console.log('Hmmm')
             const loginFeedback = feedback.data.userLogin
             await dispatch(login(loginFeedback))
         } catch(err) {
@@ -58,6 +59,7 @@ const UserLogin = (props) => {
             // await dispatch(userError(err.response.data))
         }
     }
+
     // const formChange = (e) => {
     //     e.persist()
     //     console.log(e.taget.value)
