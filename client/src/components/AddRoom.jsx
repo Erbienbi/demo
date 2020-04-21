@@ -144,6 +144,7 @@ export default (props) => {
       }
     })
     await refetch()
+    await setShow(false)
   }
 
   // if (loading) {
@@ -289,7 +290,7 @@ export default (props) => {
                     <label>Image</label>
                   </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                {/* <button type="submit" class="btn btn-primary">Submit</button> */}
               </form>
             </div>
           </Modal.Body>
@@ -297,8 +298,8 @@ export default (props) => {
             <Button variant="secondary" onClick={handleClose}>
               Close
             </Button>
-            <Button variant="primary" onClick={handleClose}>
-              Save Changes
+            <Button variant="primary" onClick={(e) => submitForm(e)}>
+              Add Room
             </Button>
           </Modal.Footer>
         </Modal>

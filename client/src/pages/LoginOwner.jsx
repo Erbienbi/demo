@@ -43,6 +43,7 @@ export default (props) => {
     })
     const loginFeedback = feedback.data.ownerLogin
     await dispatch(ownerLogin(loginFeedback))
+    setStatus({ redirectRefs: true })
   }
 
   useEffect(() => {

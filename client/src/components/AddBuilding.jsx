@@ -121,6 +121,7 @@ export default (props) => {
         token: 'asdasdasd'
       }
     })
+    setShow(false)
     // setIsLoading(true)
     // console.log('Form submit:', form)
     // appAxios({
@@ -159,58 +160,70 @@ export default (props) => {
               {building.error ? <p>{JSON.stringify(building.error)}</p> : ""}
               <form
                 onSubmit={(e) => submitForm(e)}
-                enctype="multipart/form-data"
+                encType="multipart/form-data"
               >
-                <table>
-                  <tbody>
-                    <tr>
-                      <td>Wilayah</td>
-                      <td>
+                <>
+                  <>
+                    <div>
+                      <div>Name</div>
+                      <div>
+                        <input
+                          type="text"
+                          name="name"
+                          onChange={(e) => setName(e.target.value)}
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <div>Wilayah</div>
+                      <div>
                         <input
                           type="text"
                           name="area"
                           onChange={(e) => setArea(e.target.value)}
                         />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Alamat</td>
-                      <td>
+                      </div>
+                    </div>
+                    <div>
+                      <div>Alamat</div>
+                      <div>
                         <input
                           type="text"
                           name="address"
                           onChange={(e) => setAddress(e.target.value)}
                         />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Titik Peta (insert Google Map here)</td>
-                      <td>
+                      </div>
+                    </div>
+                    <div>
+                      <div>Titik Peta (insert Google Map here)</div>
+                      <div>
                         <input
                           type="text"
                           name="coordinate"
                           onChange={(e) => setCoordinate(e.target.value)}
                         />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
+                      </div>
+                    </div>
+                    <div>
+                      <div>
                         Foto Rumah
-                        <input
+                      </div>
+                      <div>
+                      <input
                           type="file"
                           name="image"
                           onChange={(e) => setImage(e.target.files[0])}
                         />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td></td>
-                      <td>
+                      </div>
+                    </div>
+                    {/* <div>
+                      <div></div>
+                      <div>
                         <input type="submit" value="Daftarkan!" />
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+                      </div>
+                    </div> */}
+                  </>
+                </>
               </form>
             </div>
           </Modal.Body>
@@ -218,8 +231,8 @@ export default (props) => {
             <Button variant="secondary" onClick={handleClose}>
               Close
             </Button>
-            <Button variant="success" onClick={handleClose}>
-              Save Changes
+            <Button variant="success" onClick={(e) => submitForm(e)}>
+              Add Building
             </Button>
           </Modal.Footer>
         </Modal>
