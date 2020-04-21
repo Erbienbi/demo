@@ -1,7 +1,10 @@
 import React from "react";
-import { Card, ButtonGroup, Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Card, Button } from "react-bootstrap";
 
 export default (props) => {
+  const user = useSelector((state) => state.user);
   const {
     id,
     price,
@@ -39,9 +42,27 @@ export default (props) => {
           </Card.Body>
           <div className="d-flex justify-content-center mb-4">
             <Button className="mr-1" onClick={viewRoom}>
-              Show
+              Lihat 360°
             </Button>
-            <Button className="mr-1">Edit</Button>
+            {user.isOwner
+              ? ''
+              : <Link to={{pathname:'/payment',
+                  state: {
+                    id,
+                    price,
+                    UserId,
+                    BuildingId,
+                    ac,
+                    bathroom,
+                    carPort,
+                    laundry,
+                    gender,
+                    date_occupied,
+                    image}}
+                  }>
+                  <Button className="mr-1">Pesan Kamar</Button>
+                </Link>
+            }
           </div>
         </Card>
       </div>
