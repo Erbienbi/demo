@@ -2,6 +2,15 @@
 module.exports = (sequelize, DataTypes) => {
   const Building = sequelize.define('Building', {
     OwnerId: DataTypes.INTEGER,
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: 'Please insert building name'
+        }
+      }
+    },
     area: {
       type: DataTypes.STRING,
       allowNull: false,

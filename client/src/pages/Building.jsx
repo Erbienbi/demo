@@ -13,6 +13,7 @@ const GET_ONE_BUILDING = gql`
   query getOneBuilding($id: Int!) {
     getOneBuilding(id: $id) {
       id
+      name
       OwnerId
       area
       address
@@ -83,7 +84,7 @@ export default (props) => {
               </div>
               <hr />
               <div className="row">
-                {data.getOneBuilding.Rooms.map((room) => {
+                {data.getOneBuilding.Rooms && data.getOneBuilding.Rooms.map((room) => {
                   return <Room room={room} key={room.id} />;
                 })}
               </div>
