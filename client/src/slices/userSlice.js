@@ -38,6 +38,7 @@ export const slice = createSlice({
       state.name = null
       state.email = null
       localStorage.removeItem('token')
+      localStorage.removeItem('owner_token')
       state.isOwner = false
       state.authenticated = false
       // console.log('User state after log out:', state)
