@@ -65,6 +65,10 @@ function AddBuilding(props) {
                     <table>
                         <tbody>
                             <tr>
+                                <td>Building name</td>
+                                <td><input type="text" /></td>
+                            </tr>
+                            <tr>
                                 <td>Area</td>
                                 <td><input type="text" name="area" onChange={formChange} /></td>
                             </tr>

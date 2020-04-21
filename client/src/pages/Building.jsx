@@ -13,6 +13,7 @@ const GET_ONE_BUILDING = gql`
   query getOneBuilding($id: Int!) {
     getOneBuilding(id: $id) {
       id
+      name
       OwnerId
       area
       address
