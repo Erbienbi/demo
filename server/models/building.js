@@ -7,6 +7,15 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notEmpty: {
+          msg: 'Please insert building name'
+        }
+      }
+    },
+    area: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
           msg: 'Please insert area'
         }
       }
