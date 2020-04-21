@@ -12,6 +12,7 @@ class BuldingController {
     }
 
     static async postBuilding (req, res, next) {
+        // console.log(req.body)
         if (req.userData.role) {
             next({status: 404, message:'You are not authorized'})
         }
