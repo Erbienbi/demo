@@ -16,8 +16,9 @@ class BuldingController {
             next({status: 404, message:'You are not authorized'})
         }
         try {
-            const { area, address, coordinate, image } = req.body
+            const { name, area, address, coordinate, image } = req.body
             const addNewBuilding = await Building.create({
+                name,
                 area,
                 address,
                 coordinate,
