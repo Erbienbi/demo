@@ -9,6 +9,7 @@ import { Modal, Button, Form, Row, Col } from 'react-bootstrap'
 import axios from 'axios'
 import Cleave from 'cleave.js/react';
 
+
 const GET_ONE_BUILDING = gql`
   query getOneBuilding($id: Int) {
     getOneBuilding(id: $id) {
@@ -118,6 +119,8 @@ export default (props) => {
         id: Number(props.id),
       },
     });
+
+    
 
   
   const submitForm = async (e) => {

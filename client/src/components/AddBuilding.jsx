@@ -8,6 +8,10 @@ import { useMutation, useQuery } from '@apollo/react-hooks'
 import { Modal, Button } from 'react-bootstrap'
 import axios from 'axios'
 import GoogleMapReact from 'google-map-react'
+// import geocoder from 'geocoder'
+// import { GrLocationPin } from "react-icons/gr";
+import { FaMapPin } from "react-icons/fa";
+
 
 const ADD_NEW_BUILDING = gql`
     mutation postBuilding(
@@ -81,11 +85,28 @@ export default (props) => {
 const [lat, setLat] = useState(-6.26075);
 const [lng, setLng] = useState(106.78192);
   const [zoom, setZoom] = useState(19)
+
   const getDot = (e) => {
     setLat(e.lat);
     setLng(e.lng);
     setCoordinate(`${lat}, ${lng}`)
   };
+  // let geocoder = new google.maps.Geocoder();
+  
+  // const getLocation = (loc) => {
+  //   geocoder.geocode(loc,(err,data)=>{
+  //     console.log(data, 'INI DATA');
+  //     if(typeof data !== "undefined" && data.status === 'OK'){
+  //       this.setState({
+  //         lat: data.results[0].geometry.location.lat,
+  //         lng: data.results[0].geometry.location.lng
+  //       })
+  //     } else {
+  //       return (<h6>no result found</h6>)
+  //     }
+  //   })
+  // }
+
   useEffect(() => {
     dispatch(clearError())
     // console.log('isLoading is now:', isLoading)
@@ -215,19 +236,6 @@ const [lng, setLng] = useState(106.78192);
                         />
                       </div>
                     </div>
-                    <div>
-                      <div>Titik Peta (insert Google Map here)</div>
-                      <div>
-                        <input
-                          className="form-control"
-                          type="text"
-                          name="coordinate"
-                          // onChange={(e) => setCoordinate(e.target.value)}
-                          disabled
-                          value={coordinate}
-                        />
-                      </div>
-                    </div>
                     {/* <div>
                       <div></div>
                       <div>
@@ -237,6 +245,15 @@ const [lng, setLng] = useState(106.78192);
                   </>
                 </>
               </form>
+              <div className="mt-3">
+                <input
+                  className="form-control"
+                  type="text"
+                  name="coordinate"
+                  disabled
+                  value={coordinate}
+                />
+              </div>
               <GoogleMapReact
                 style={{
                   width: "100%",
@@ -249,14 +266,9 @@ const [lng, setLng] = useState(106.78192);
                 zoom={zoom}
                 onClick={(e) => getDot(e)}
               >
-                <img
-                  style={{ width: 20, height: 20 }}
-                  lat={lat}
-                  lng={lng}
-                  src="http://www.clker.com/cliparts/l/a/V/x/F/r/house-icon-dark-green-hi.png"
-                  alt="icon-home"
-                />
+                <FaMapPin style={{fontSize: "3em", color: "red"}}></FaMapPin>
               </GoogleMapReact>
+              
             </div>
           </Modal.Body>
           <Modal.Footer>

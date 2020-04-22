@@ -11,7 +11,7 @@ export default (props) => {
               <Form.Label>Cari berdasarkan wilayah:</Form.Label>
               <Form.Control as="select" custom 
                 onChange={props.handleInput}>
-                <option disabled defaultValue>Nama Wilayah</option>
+                <option disabled selected>Nama Wilayah</option>
                 <option>Jakarta Barat</option>
                 <option>Jakarta Selatan</option>
                 <option>Jakarta Timur</option>
