@@ -16,12 +16,26 @@ export default (props) => {
     <>
       <div className="mb-2 text-center">
         <div className="my-1">
-
-          <img src={image} width="1000px" height="500px" className="rounded"></img>
-          <b><h4 class="text-dark mt-3">{name}</h4></b>
+          <img
+            src={image}
+            width="1000px"
+            height="500px"
+            className="rounded"
+          ></img>
+          <b>
+            <h4 class="text-dark mt-3">{name}</h4>
+          </b>
           <div className="mt-3">{address}</div>
         </div>
-        <a href={coordinate} target="_blank" className="btn btn-primary mt-3">Show on Map</a>
+        <a
+          href={
+            "https://www.google.com/maps/search/?api=1&query="+coordinate
+          }
+          target="_blank"
+          className="btn btn-primary mt-3"
+        >
+          Show on Map
+        </a>
       </div>
     </>
   );

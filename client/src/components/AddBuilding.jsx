@@ -7,7 +7,7 @@ import { gql } from 'apollo-boost'
 import { useMutation, useQuery } from '@apollo/react-hooks'
 import { Modal, Button } from 'react-bootstrap'
 import axios from 'axios'
-
+import GoogleMapReact from 'google-map-react'
 
 const ADD_NEW_BUILDING = gql`
     mutation postBuilding(
@@ -78,6 +78,14 @@ export default (props) => {
   //     coordinate: '',
   //     image: '',
   // });
+const [lat, setLat] = useState(-6.26075);
+const [lng, setLng] = useState(106.78192);
+  const [zoom, setZoom] = useState(19)
+  const getDot = (e) => {
+    setLat(e.lat);
+    setLng(e.lng);
+    setCoordinate(`${lat}, ${lng}`)
+  };
   useEffect(() => {
     dispatch(clearError())
     // console.log('isLoading is now:', isLoading)
@@ -144,6 +152,7 @@ export default (props) => {
     //     dispatch(buildingError(err.response.data))
     //     setIsLoading(false)
     // })
+
   }
   if (isLoading) {
     return <h1>Loading...</h1>
@@ -200,25 +209,25 @@ export default (props) => {
                       </div>
                     </div>
                     <div>
+                      <div>Foto Rumah</div>
+                      <div>
+                        <input
+                          type="file"
+                          name="image"
+                          onChange={(e) => setImage(e.target.files[0])}
+                        />
+                      </div>
+                    </div>
+                    <div>
                       <div>Titik Peta (insert Google Map here)</div>
                       <div>
                         <input
                           className="form-control"
                           type="text"
                           name="coordinate"
-                          onChange={(e) => setCoordinate(e.target.value)}
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <div>
-                        Foto Rumah
-                      </div>
-                      <div>
-                      <input
-                          type="file"
-                          name="image"
-                          onChange={(e) => setImage(e.target.files[0])}
+                          // onChange={(e) => setCoordinate(e.target.value)}
+                          disabled
+                          value={coordinate}
                         />
                       </div>
                     </div>
@@ -228,6 +237,26 @@ export default (props) => {
                         <input type="submit" value="Daftarkan!" />
                       </div>
                     </div> */}
+                    <GoogleMapReact
+                      style={{
+                        width: "100%",
+                        height: 350,
+                        margin: 10,
+                        bottom: 0,
+                        position: "relative",
+                      }}
+                      center={{ lat: lat, lng: lng }}
+                      zoom={zoom}
+                      onClick={(e) => getDot(e)}
+                    >
+                      <img
+                        style={{ width: 20, height: 20 }}
+                        lat={lat}
+                        lng={lng}
+                        src="http://www.clker.com/cliparts/l/a/V/x/F/r/house-icon-dark-green-hi.png"
+                        alt="icon-home"
+                      />
+                    </GoogleMapReact>
                   </>
                 </>
               </form>

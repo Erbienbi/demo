@@ -32,7 +32,7 @@ import OwnerLogin from "./pages/LoginOwner";
 import UserRegister from "./pages/RegisterUser";
 import OwnerRegister from "./pages/RegisterOwner";
 import Payment from './pages/Payment';
-
+import Tutorial from './components/Tutorial'
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const isAuthenticated = useSelector(state => state.user.authenticated)
   return (
@@ -124,6 +124,7 @@ function App() {
             {/* WITH STYLE */}
             <Route exact path="/" component={HomePage} />
             <Route path="/building/:BuildingId" component={BuildingPage} />
+            <Route path="/tutorial" component={Tutorial} />
             {/* END WITH STYLE */}
             <Route exact path="/home" component={Home} />
             <Route path="/register-user" component={UserRegister} />

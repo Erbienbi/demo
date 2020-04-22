@@ -35,11 +35,10 @@ export default class ClientVR extends React.Component {
       facilities: [],
       gender: '',
       isLoading: true,
-      img: 'https://video.360cities.net/digitalstudio/01622412_Liberty2018-1024x512.jpg',
-      rooms: ['https://i0.wp.com/hitsbanget.com/wp-content/uploads/2018/12/facebook-360images_header3-724x380.jpg?fit=724%2C380&ssl=1&resize=1280%2C720',
-              'https://www.arch2o.com/wp-content/uploads/2016/06/Arch2O-360-Photos01.jpg'],
-      currentRoom: 'https://www.arch2o.com/wp-content/uploads/2016/06/Arch2O-360-Photos01.jpg',
-      currentImage: 'https://www.arch2o.com/wp-content/uploads/2016/06/Arch2O-360-Photos01.jpg',
+      img: '',
+      rooms: [],
+      currentRoom: '',
+      currentImage: '',
       current: 0,
       start: 0,
       listsRoom: false,
@@ -48,16 +47,18 @@ export default class ClientVR extends React.Component {
   }
 
   fetchData = async () => {
-    let server = 'http://localhost:3000'
+    let server = "https://enigmatic-inlet-64583.herokuapp.com";
     try {
       const options = {
         method: 'get'
       }
-      let data = await fetch(`${server}/room/${RoomId}`, options)
       let allData = await fetch(`${server}/building/${BuildingId}`, options)
 
-      const room = JSON.parse(data._bodyInit)
       const building = JSON.parse(allData._bodyInit)
+      console.log("ini building", building);
+
+      const room = building.Rooms.filter(el => el.id === RoomId)[0]
+      console.log(room)
 
       let keys = Object.keys(room);
       let filtered = keys.filter(key => room[key] === true)
@@ -67,8 +68,14 @@ export default class ClientVR extends React.Component {
       this.setState({ image: room.image })
       this.setState({ gender: room.gender })
 
-      this.setState({ image: room.image })
-      this.setState({ roomsDetails: building.Rooms })
+      const rooms = building.Rooms.map(el => el.image)
+      this.setState({ rooms: rooms });
+      this.setState({ gender: room.gender });
+
+      this.setState({ currentImage: room.image })
+      this.setState({ roomsDetails: building.Rooms });
+      this.setState({ img: room.image });
+
       console.log(this.state)
     } catch (err) {
       console.log(err.message, 'error')
@@ -93,15 +100,16 @@ export default class ClientVR extends React.Component {
     this.setState({ currentImage: this.state.rooms[this.state.current] })
   }
 
-  componentDidMount() {
-    this.fetchData()
+  componentDidMount = async () => {
+    await this.fetchData()
     this.setState({ isLoading: false })
-    Environment.setBackgroundImage(
+    await Environment.setBackgroundImage(
       { uri: `https://cors-anywhere.herokuapp.com/${this.state.img}` }
     )
   }
 
   changeBG = (obj) => {
+    console.log('ganti bg', obj)
     let keys = Object.keys(obj);
     let filtered = keys.filter(key => obj[key] === true)
     console.log('ini', filtered)
@@ -137,6 +145,7 @@ export default class ClientVR extends React.Component {
           </VrButton>
           {this.state.title &&
             <View style={styles.greetingBox}>
+              <Text style={styles.details}>Room {this.state.current+1}</Text>
               <Text style={styles.details}>{`facilities: \n-` + this.state.facilities.join('\n -')}</Text>
               <Text style={styles.details}>Price: {formatter.format(this.state.price)}</Text>
               <Text style={styles.details}>Suitable for {this.state.gender}</Text>
@@ -156,7 +165,10 @@ export default class ClientVR extends React.Component {
                 onClick={this.back}>
                 <Image source={asset('back.png')} style={{ width: 50, height: 50 }} />
               </VrButton>
-              <VrButton onClick={() => this.changeBG(this.state.roomsDetails[this.state.current])}>
+            <VrButton onClick={() => {
+              console.log(this.state.roomsDetails[this.state.current]);
+              this.changeBG(this.state.roomsDetails[this.state.current])
+            }}>
                 <Image source={{ uri: `https://cors-anywhere.herokuapp.com/${this.state.currentImage}` }} style={{ width: 200, height: 100 }} />
               </VrButton>
               <VrButton

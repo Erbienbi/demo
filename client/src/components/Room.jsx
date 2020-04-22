@@ -23,7 +23,7 @@ export default (props) => {
   console.log(props)
   const viewRoom = ()=>{
   let vr = 'http://localhost:8081/'
-    window.open(`${vr}+?BuildingId=${BuildingId}&&RoomId=${id}`,'_newtab')
+    window.open(`${vr}?BuildingId=${BuildingId}&&RoomId=${id}`,'_newtab')
   }
 
   if(!props.room){
