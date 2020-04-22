@@ -4,12 +4,11 @@ const {generateToken} = require('../helpers/jsonwebtoken.js')
 
 class OwnerController {
     static register(req, res, next) {
-
-        const { name, email, password, ktp, phone} = req.body
-        Owner.create({ name, email, password, ktp, phone})
-
+        const { name, email, password, phone, ktp } = req.body
+        // console.log(ktp, "ini file gcp =====================")
+        Owner.create({ name, email, password, phone, ktp })
         .then(data => {
-            res.status(201).json({ data, message: 'Successfully registered new Owner' })
+            res.status(201).json('Successfully registered new Owner')
         })
         .catch(next)
     }
@@ -37,11 +36,10 @@ class OwnerController {
             let ownerProfile = {
                 id: owner.id,
                 name: owner.name,
-                email: owner.email,
-                role: owner.role,
+                email: owner.email
             }
             let token = generateToken(ownerProfile)
-            res.status(200).json({ token, owner: {id: owner.id, name: owner.name}, message: 'Log in successful' })
+            res.status(200).json({ token, user: {id: owner.id, name: owner.name, email: owner.email}, message: 'Log in successful' })
         })
         .catch(next)
     }
@@ -62,12 +60,11 @@ class OwnerController {
         let obj = {
             name: req.body.name,
             email: req.body.email,
-            role: req.body.role,
         }
-        Owner.update({ where: { id: req.userData.id }}, obj)
+        Owner.update(obj, { where: { id: req.userData.id }})
         .then((data) => {
-            if (data) {
-                res.status(200).json(data)
+            if (data[0] === 1) {
+                res.status(200).json()
             } else {
                 throw {status: 400, message: `oops... something's wrong`}
             }

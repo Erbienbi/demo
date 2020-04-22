@@ -1,30 +1,40 @@
-const {Room} = require('../models')
+const { Room } = require('../models')
 
 class RoomController {
     static async getAllRoom (req,res,next) {
-        rooms = await Room.findAll()
-        res.status(200).json(rooms)
+        try {
+            const rooms = await Room.findAll()
+            res.status(200).json(rooms)
+        } catch (err) {  
+            next(err)
+        }
     }
 
     static async getOneRoom (req,res,next) {
         try {
             let id = Number(req.params.RoomId)
-            rooms = await Room.findAll({where: {id}})
+            const rooms = await Room.findOne({where: {id}})
             res.status(200).json(rooms)
         } catch (err) {
             next(err)
         }
     }
     static async addRoom (req,res,next) {
+        if (req.userData.role) {
+            next({status:400, message:'You are not authorized'})
+        }
+        console.log(req.body, 'INI REQ BODY DI CONTROLLER')
+        const { BuildingId } = req.params
+        console.log(BuildingId, 'INI ID DI CONTROLLER')
         try {
             let {
                 price,
-                BuildingId,
                 ac,
                 bathroom,
                 carPort,
                 laundry,
-                gender
+                gender,
+                image
             } = req.body
             let newRoom = await Room.create({
                 price,
@@ -33,43 +43,50 @@ class RoomController {
                 bathroom,
                 carPort,
                 laundry,
-                gender})
-            res.status(201).json({message:'successfully create new room', room:newRoom })
+                gender,
+                image
+            })
+            console.log(newRoom)
+            res.status(201).json('successfully create new room')
         } catch (err) {
+            console.log(err)
             next(err)
         }
     }
     static async deleteRoom(req,res,next){
+        if (req.userData.role) {
+            next({status:400, message:'You are not authorized'})
+        }
         try {
             const {RoomId} = req.params
-            await Room.destory({where: {id:RoomId}})
-            res.status(200).json({message: 'room has been deleted succesfully'})
+            const success = await Room.destroy({where: {id:RoomId}})
+            if (success == 1) {
+                res.status(200).json('room has been deleted succesfully')
+            }
+            next({status:404, message:'Something wrong!'})
         } catch (err) {
             next(err)
         }
     }
 
     static async updateRoom (req,res,next){
-        const {RoomId, BuildingId} = req.params
-        let {
-            price,
-            ac,
-            bathroom,
-            carPort,
-            laundry,
-            gender } = req.body
-            let obj = {
-                UserId:req.userData.id,
-                price,
-                BuildingId,
-                ac,
-                bathroom,
-                carPort,
-                laundry,
-                gender
+        const { RoomId } = req.params
+        const userId = req.userData.id
+        const { date_occupied } = req.body
+        const updateData = {
+            UserId: userId,
+            date_occupied
+        }
+        try {
+            const updateRoom = await Room.update(updateData,{where:{id:RoomId}})
+            if (updateRoom[0] === 1) {
+                res.status(200).json('Room sucessfully booked')
+            } else {
+                next({status:400, message:'Something is wrong'})
             }
-        await Room.update({where:{id:RoomId}}, obj)
-        res.status(200).json({message: 'successfully updated rooms'})
+        } catch (err) {
+            next(err)
+        }
     }
 }
 
