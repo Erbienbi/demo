@@ -1,7 +1,7 @@
 const { gql } = require('apollo-server-express')
 const Redis = require('ioredis')
 const redis = new Redis()
-const ERBIENBI_SERVER = 'http://localhost:3000'
+const ERBIENBI_SERVER = 'https://enigmatic-inlet-64583.herokuapp.com'
 const axios = require('axios')
 const schema = gql`
     type Building {

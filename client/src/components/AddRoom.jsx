@@ -5,8 +5,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { roomError, clearError } from '../slices/roomSlice';
 import { gql } from 'apollo-boost';
 import appAxios from '../config/appAxios';
-import { Modal, Button } from 'react-bootstrap'
+import { Modal, Button, Form, Row, Col } from 'react-bootstrap'
 import axios from 'axios'
+import Cleave from 'cleave.js/react';
 
 const GET_ONE_BUILDING = gql`
   query getOneBuilding($id: Int) {
@@ -120,11 +121,10 @@ export default (props) => {
   
   const submitForm = async (e) => {
     e.preventDefault()
-    // console.log(price, ac, bathroom, laundry, carPort, gender, image)
-    // setIsLoading(true)
+    const number = price.split(',').join('')
     const token = localStorage.owner_token
     let formData = new FormData();
-    formData.append("price", price)
+    formData.append("price", Number(number))
     formData.append("ac", ac);
     formData.append("bathroom", bathroom);
     formData.append("carPort", carPort);
@@ -134,7 +134,7 @@ export default (props) => {
     // console.log(area, address, coordinate, token)
     const z = await axios({
       method: 'POST',
-      url: `http://localhost:3000/room/${Number(props.id)}`,
+      url: `https://enigmatic-inlet-64583.herokuapp.com/room/${Number(props.id)}`,
       headers: {token:token},
       data: formData
     })
@@ -161,41 +161,50 @@ export default (props) => {
 
         <Modal show={show} onHide={handleClose}>
           <Modal.Header closeButton>
-            <Modal.Title>Modal heading</Modal.Title>
+            <Modal.Title>Add Room</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <div>
-              <h1>Add Room</h1>
               {room.error ? <p>{JSON.stringify(room.error)}</p> : ""}
-              <form onSubmit={(e) => submitForm(e)} encType="multipart/form-data">
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Rent price / month</label>
-                  <input type="number" class="form-control" onChange={(e) => setPrice(Number(e.target.value))}/>
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputPassword1">AC</label>
-                  <div class="custom-control custom-radio custom-control-inline">
+              <Form onSubmit={(e) => submitForm(e)} encType="multipart/form-data">
+                <Form.Group as={Row}>
+                  <Form.Label className="ml-3">Rent price / month</Form.Label>
+                  <Col>
+                  <Cleave
+                    className="ml-2 form-control"
+                    options={{numeral: true}}
+                    numeralThousandsGroupStyle= {'thousand'}
+                    onChange={(e) => setPrice(e.target.value)} 
+                    />
+                  </Col>
+                </Form.Group>
+                <div className="form-group row">
+                  <label for="exampleInputPassword1" className='col-3'>AC</label>
+                  <div className='col-9'>
+                    <div className="custom-control custom-radio custom-control-inline">
+                      <input
+                        type="radio"
+                        name="ac"
+                        value="0"
+                        onChange={(e) => setAc(false)}
+                      />
+                      <label>None</label> 
+                    </div>
+                    <div className="custom-control custom-radio custom-control-inline">
                     <input
-                      type="radio"
-                      name="ac"
-                      value="0"
-                      onChange={(e) => setAc(false)}
-                    />
-                    <label>None</label> 
-                  </div>
-                  <div class="custom-control custom-radio custom-control-inline">
-                  <input
-                      type="radio"
-                      name="ac"
-                      value="0"
-                      onChange={(e) => setAc(true)}
-                    />
-                    <label>Availble</label>
+                        type="radio"
+                        name="ac"
+                        value="0"
+                        onChange={(e) => setAc(true)}
+                      />
+                      <label>Available</label>
+                    </div>
                   </div>
                 </div>
-                <div class="form-group">
-                  <label for="exampleInputPassword1">Bathroom</label>
-                  <div class="custom-control custom-radio custom-control-inline">
+                <div className="form-group row">
+                  <label for="exampleInputPassword1"  className='col-3'>Bathroom</label>
+                  <div className="col-9">
+                  <div className="custom-control custom-radio custom-control-inline">
                     <input
                       type="radio"
                       name="bathroom"
@@ -204,19 +213,21 @@ export default (props) => {
                     />
                     <label>None</label> 
                   </div>
-                  <div class="custom-control custom-radio custom-control-inline">
+                  <div className="custom-control custom-radio custom-control-inline">
                   <input
                       type="radio"
                       name="bathroom"
                       value="0"
                       onChange={(e) => setBathroom(true)}
                     />
-                    <label>Availble</label>
+                    <label>Available</label>
                   </div>
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputPassword1">Car Port</label>
-                  <div class="custom-control custom-radio custom-control-inline">
+                  </div>
+                  </div>
+                <div className="form-group row">
+                  <label for="exampleInputPassword1"  className='col-3'>Car Port</label>
+                  <div className="col-9">
+                  <div className="custom-control custom-radio custom-control-inline">
                     <input
                       type="radio"
                       name="car"
@@ -225,73 +236,81 @@ export default (props) => {
                     />
                     <label>None</label> 
                   </div>
-                  <div class="custom-control custom-radio custom-control-inline">
+                  <div className="custom-control custom-radio custom-control-inline">
                   <input
                       type="radio"
                       name="car"
                       value="1"
                       onChange={(e) => setcarPort(true)}
                     />
-                    <label>Availble</label>
+                    <label>Available</label>
                   </div>
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputPassword1">Laundry</label>
-                  <div class="custom-control custom-radio custom-control-inline">
-                    <input
-                      type="radio"
-                      name="laundry"
-                      value="0"
-                      onChange={(e) => setLaundry(false)}
-                    />
-                    <label>None</label> 
                   </div>
-                  <div class="custom-control custom-radio custom-control-inline">
+                  </div>
+                <div className="form-group row">
+                  <label for="exampleInputPassword1"  className='col-3'>Laundry</label>
+                  <div className="col-9">
+                    <div className="custom-control custom-radio custom-control-inline">
+                      <input
+                        type="radio"
+                        name="laundry"
+                        value="0"
+                        onChange={(e) => setLaundry(false)}
+                      />
+                      <label>None</label> 
+                    </div>
+                    <div className="custom-control custom-radio custom-control-inline">
                   <input
                       type="radio"
                       name="laundry"
                       value="1"
                       onChange={(e) => setLaundry(true)}
                     />
-                    <label>Availble</label>
+                    <label>Available</label>
+                  </div>        
                   </div>
                 </div>
-                <div class="form-group">
-                  <label for="exampleInputPassword1">Gender</label>
-                  <div class="custom-control custom-radio custom-control-inline">
+                <div className="form-group row">
+                  <label for="exampleInputPassword1"  className='col-3'>Gender</label>
+                  <div className="col-9">
+
+                  <div className="custom-control custom-radio custom-control-inline">
                     <input
                       type="radio"
                       name="gender"
                       value="0"
                       onChange={(e) => setGender('Male')}
-                    />
+                      />
                     <label>Male</label> 
                   </div>
-                  <div class="custom-control custom-radio custom-control-inline">
+                  <div className="custom-control custom-radio custom-control-inline">
                   <input
                       type="radio"
                       name="gender"
                       value="1"
                       onChange={(e) => setGender('Female')}
-                    />
+                      />
                     <label>Female</label>
                   </div>
-                  <div class="custom-control custom-radio custom-control-inline">
+                  <div className="custom-control custom-radio custom-control-inline">
                   <input
                       type="radio"
                       name="gender"
                       value="2"
                       onChange={(e) => setGender('Mix')}
-                    />
+                      />
                     <label>Mix</label>
                   </div>
-                  <div class="form-group">
-                  <input type="file" name="image" onChange={(e) => setImage(e.target.files[0])}/>
-                    <label>Image</label>
+                      </div>
+                  <div className="form-group row ml-1">
+                  <label className="col-3">Image</label>
+                  <div className="col-9">
+                  <input type="file" name="image" onChange={(e) => setImage(e.target.files[0])} />
+                  </div>
                   </div>
                 </div>
-                {/* <button type="submit" class="btn btn-primary">Submit</button> */}
-              </form>
+                {/* <button type="submit" className="btn btn-primary">Submit</button> */}
+              </Form>
             </div>
           </Modal.Body>
           <Modal.Footer>

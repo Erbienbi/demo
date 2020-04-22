@@ -7,7 +7,7 @@ import axios from "axios";
 
 // Request to local server //
 const instance = axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: "https://enigmatic-inlet-64583.herokuapp.com/",
 });
 
 export default instance;

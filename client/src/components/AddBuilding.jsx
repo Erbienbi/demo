@@ -7,6 +7,8 @@ import { gql } from 'apollo-boost'
 import { useMutation, useQuery } from '@apollo/react-hooks'
 import { Modal, Button } from 'react-bootstrap'
 import axios from 'axios'
+
+
 const ADD_NEW_BUILDING = gql`
     mutation postBuilding(
         $token: String!
@@ -111,7 +113,7 @@ export default (props) => {
     // console.log(area, address, coordinate, token)
     await axios({
       method: 'POST',
-      url: 'http://localhost:3000/building',
+      url: 'https://enigmatic-inlet-64583.herokuapp.com/building',
       headers: {token:localStorage.owner_token},
       data: formData
     })
@@ -168,6 +170,7 @@ export default (props) => {
                       <div>Name</div>
                       <div>
                         <input
+                          className="form-control"
                           type="text"
                           name="name"
                           onChange={(e) => setName(e.target.value)}
@@ -178,6 +181,7 @@ export default (props) => {
                       <div>Wilayah</div>
                       <div>
                         <input
+                          className="form-control"
                           type="text"
                           name="area"
                           onChange={(e) => setArea(e.target.value)}
@@ -188,6 +192,7 @@ export default (props) => {
                       <div>Alamat</div>
                       <div>
                         <input
+                          className="form-control"
                           type="text"
                           name="address"
                           onChange={(e) => setAddress(e.target.value)}
@@ -198,6 +203,7 @@ export default (props) => {
                       <div>Titik Peta (insert Google Map here)</div>
                       <div>
                         <input
+                          className="form-control"
                           type="text"
                           name="coordinate"
                           onChange={(e) => setCoordinate(e.target.value)}

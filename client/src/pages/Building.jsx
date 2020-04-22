@@ -56,6 +56,7 @@ export default (props) => {
   if (isLoading) {
     return <p> Loading...</p>
   } else {
+    const sort = data.getOneBuilding.Rooms.sort((a,b) => a.id - b.id)
     return (
       <>
         <div className="d-flex justify-content-start">
@@ -76,7 +77,7 @@ export default (props) => {
             >
               {user.isOwner
               ? <div className="d-flex justify-content-end px-3">
-                  <span>Punya kamar untuk disewakan?</span>
+                  <span className="mr-2">Punya kamar untuk disewakan?</span>
                   {/* <Button onClick={() => props.history.push("/add-room")}>
                     Add Room
                   </Button> */}
@@ -87,7 +88,7 @@ export default (props) => {
             }
               <hr />
               <div className="row">
-                {data.getOneBuilding.Rooms && data.getOneBuilding.Rooms.map((room, idx) => {
+                {data.getOneBuilding.Rooms && sort.map((room, idx) => {
                   return <Room room={room} key={room.id} num={idx} />;
                 })}
               </div>

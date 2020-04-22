@@ -37,39 +37,42 @@ export default (props) => {
           <Card.Body>
             <Card.Title>Room {props.num + 1}</Card.Title>
             <div className="my-1">
-              <div>Price: {conversi(price)} / month</div>
-              <div>AC: {ac ? "Yes" : "No"}</div>
-              <div>Bathroom: {bathroom ? "Yes" : "No"}</div>
-              <div>Carport: {carPort ? "Yes" : "No"}</div>
-              <div>Laundry: {laundry ? "Yes" : "No"}</div>
+              <div>{conversi(price)} / month</div>
+              <div className="mt-2"><b>Fasilitas</b></div>
+              <div>AC: {ac ? "✔" : "✘"}</div>
+              <div>Bathroom: {bathroom ? "✔" : "✘"}</div>
+              <div>Carport: {carPort ? "✔" : "✘"}</div>
+              <div>Laundry: {laundry ? "✔" : "✘"}</div>
               <div>Gender: {gender}</div>
             </div>
           </Card.Body>
           <div className="d-flex justify-content-center mb-4">
-            <Button className="mr-1" onClick={viewRoom}>
-              Lihat 360°
-            </Button>
+            
             {user.isOwner || props.room.date_occupied
               ? ''
-              : <Link to={{pathname:'/payment',
-                  state: {
-                    id,
-                    price,
-                    UserId,
-                    BuildingId,
-                    ac,
-                    bathroom,
-                    carPort,
-                    laundry,
-                    gender,
-                    date_occupied,
-                    image}}
-                  }>
-                    <Button className="mr-1">Pesan Kamar</Button>
-                  {/* {!props.room.date_occupied ?  : 'Room is not available'} */}
-                  
-                </Link>
+              : <>  
+                  <Button className="mr-1" onClick={viewRoom}>
+                    Lihat 360°
+                  </Button>
+                  <Link to={{pathname:'/payment',
+                    state: {
+                      id,
+                      price,
+                      UserId,
+                      BuildingId,
+                      ac,
+                      bathroom,
+                      carPort,
+                      laundry,
+                      gender,
+                      date_occupied,
+                      image}}
+                    }>
+                      <Button className="mr-1">Pesan Kamar</Button>
+                  </Link>
+                </>
             }
+            {props.room.date_occupied && <p style={{color:'red'}}>Not Available</p>}
           </div>
         </Card>
       </div>

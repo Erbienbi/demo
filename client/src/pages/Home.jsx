@@ -87,6 +87,7 @@ export default () => {
     return <p> {error.message} </p>
   } else {
     console.log('Data of buildings', buildings)
+    const sorted = search.result.sort((a,b) => a.id - b.id)
     return (
       <>
         <Card className="mt-1 shadow-sm" style={{ borderRadius: "0.5rem" }}>
@@ -105,7 +106,7 @@ export default () => {
               ? <p> Loading...</p>
               : <>
                 {search.result.length > 0 
-                ? search.result.map((building) => {
+                ? sorted.map((building) => {
                   return <CardComponent building={building} key={building.id} />;
                 })
                 : buildings.map((building) => {
