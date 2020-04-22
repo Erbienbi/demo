@@ -3,17 +3,12 @@ import {
   Navbar,
   Nav,
   NavDropdown,
-  Form,
-  InputGroup,
-  FormControl,
-  Button,
-  NavItem,
 } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../slices/userSlice';
 import { Link } from 'react-router-dom';
 import { FaUserCircle } from 'react-icons/fa';
-import { IoMdNotificationsOutline } from 'react-icons/io';
+// import { IoMdNotificationsOutline } from 'react-icons/io';
 import Logo from '../assets/logo.png';
 
 export default () => {
@@ -89,15 +84,11 @@ export default () => {
             </Nav.Link> */}
             {!isAuthenticated ? (
               <>
-                <Nav.Link>
-                  <Link to="/register-user" className="btn">
+                <Nav.Link as={Link} to="/register-user">
                     Register
-                  </Link>
                 </Nav.Link>
-                <Nav.Link>
-                  <Link to="/login-user" className="btn">
+                <Nav.Link as={Link} to="/login-user">
                     Sign In
-                  </Link>
                 </Nav.Link>
               </>
             ) : (

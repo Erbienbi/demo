@@ -61,10 +61,7 @@ function UserProfile(props) {
                               <b>Kamar</b>: {user.RoomId
                                 ? `ID kamar: ${user.RoomId}`
                                 : <>
-                                  'Belum booking'
-                                  <Link to="/">
-                                    <Button className="btn-success ml-3">Cari Kamar</Button>
-                                  </Link>
+                                  'Tidak booking'
                                   </>
                               }
                             </p>
