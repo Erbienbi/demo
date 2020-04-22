@@ -102,11 +102,7 @@ const [lng, setLng] = useState(106.78192);
   const [coordinate, setCoordinate] = useState('')
   const [image, setImage] = useState('')
   const { error, loading, data, refetch } = useQuery(GET_ALL_BUILDING);
-  const [clean] = useMutation(CLEAN, {
-    refetchQueries: [
-      { query: GET_ALL_BUILDING }
-    ]
-  })
+  const [clean] = useMutation(CLEAN)
   const submitForm = async (e) => {
     console.log(image, 'image on submit')
     e.preventDefault()
@@ -131,6 +127,7 @@ const [lng, setLng] = useState(106.78192);
         token: 'asdasdasd'
       }
     })
+    await refetch()
     setShow(false)
     // setIsLoading(true)
     // console.log('Form submit:', form)
@@ -237,29 +234,29 @@ const [lng, setLng] = useState(106.78192);
                         <input type="submit" value="Daftarkan!" />
                       </div>
                     </div> */}
-                    <GoogleMapReact
-                      style={{
-                        width: "100%",
-                        height: 350,
-                        margin: 10,
-                        bottom: 0,
-                        position: "relative",
-                      }}
-                      center={{ lat: lat, lng: lng }}
-                      zoom={zoom}
-                      onClick={(e) => getDot(e)}
-                    >
-                      <img
-                        style={{ width: 20, height: 20 }}
-                        lat={lat}
-                        lng={lng}
-                        src="http://www.clker.com/cliparts/l/a/V/x/F/r/house-icon-dark-green-hi.png"
-                        alt="icon-home"
-                      />
-                    </GoogleMapReact>
                   </>
                 </>
               </form>
+              <GoogleMapReact
+                style={{
+                  width: "100%",
+                  height: 350,
+                  margin: 10,
+                  bottom: 0,
+                  position: "relative",
+                }}
+                center={{ lat: lat, lng: lng }}
+                zoom={zoom}
+                onClick={(e) => getDot(e)}
+              >
+                <img
+                  style={{ width: 20, height: 20 }}
+                  lat={lat}
+                  lng={lng}
+                  src="http://www.clker.com/cliparts/l/a/V/x/F/r/house-icon-dark-green-hi.png"
+                  alt="icon-home"
+                />
+              </GoogleMapReact>
             </div>
           </Modal.Body>
           <Modal.Footer>
