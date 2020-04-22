@@ -8,8 +8,12 @@ import {
   localStorage,
   VrButton,
   Environment,
-  Image
+  Image,
+  asset
 } from 'react-360';
+import { assertType } from 'graphql';
+// import axios from 'axios'
+
 
 const formatter = new Intl.NumberFormat('id-ID', {
   style: 'currency',
@@ -17,9 +21,9 @@ const formatter = new Intl.NumberFormat('id-ID', {
   minimumFractionDigits: 2
 })
 
-// const Location = NativeModules.Location.href.split('?')[1].split('&&')
-// const BuildingId = Number(Location[0].split('=')[1])
-// const RoomId = Number(Location[1].split('=')[1])
+const Location = NativeModules.Location.href.split('?')[1].split('&&')
+const BuildingId = Number(Location[0].split('=')[1])
+const RoomId = Number(Location[1].split('=')[1])
 // const Token = Location[2].split('=')[1]
 
 export default class ClientVR extends React.Component {
@@ -28,40 +32,46 @@ export default class ClientVR extends React.Component {
     this.state = {
       title: false,
       price: 1700000,
-      address: 'jl.wadidawcikidingding',
-      facilities: ['ac', 'bathroom'],
+      facilities: [],
+      gender: '',
       isLoading: true,
       img: 'https://video.360cities.net/digitalstudio/01622412_Liberty2018-1024x512.jpg',
-      rooms: ['https://www.arch2o.com/wp-content/uploads/2016/06/Arch2O-360-Photos01.jpg',
-             'https://i0.wp.com/hitsbanget.com/wp-content/uploads/2018/12/facebook-360images_header3-724x380.jpg?fit=724%2C380&ssl=1&resize=1280%2C720', 
-             'https://www.arch2o.com/wp-content/uploads/2016/06/Arch2O-360-Photos01.jpg'],
-      limit: 2,
+      rooms: ['https://i0.wp.com/hitsbanget.com/wp-content/uploads/2018/12/facebook-360images_header3-724x380.jpg?fit=724%2C380&ssl=1&resize=1280%2C720',
+              'https://www.arch2o.com/wp-content/uploads/2016/06/Arch2O-360-Photos01.jpg'],
+      currentRoom: 'https://www.arch2o.com/wp-content/uploads/2016/06/Arch2O-360-Photos01.jpg',
+      currentImage: 'https://www.arch2o.com/wp-content/uploads/2016/06/Arch2O-360-Photos01.jpg',
+      current: 0,
       start: 0,
-      current:0,
-      listsRoom: true,
+      listsRoom: false,
+      roomsDetails: []
     }
   }
 
   fetchData = async () => {
-    let server = ''
+    let server = 'http://localhost:3000'
     try {
       const options = {
-        method: 'get',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json',
-          token: localStorage.token,
-        }
+        method: 'get'
       }
-      let data = await fetch(`${server}/${BuildingId}/${RoomId}`, options)
-      let keys = Object.keys(data);
-      let filtered = keys.filter(key => data[key])
-      console.log(data)
+      let data = await fetch(`${server}/room/${RoomId}`, options)
+      let allData = await fetch(`${server}/building/${BuildingId}`, options)
+
+      const room = JSON.parse(data._bodyInit)
+      const building = JSON.parse(allData._bodyInit)
+
+      let keys = Object.keys(room);
+      let filtered = keys.filter(key => room[key] === true)
+
       this.setState({ facilities: filtered })
-      this.setState({ price: data.price })
-      this.setState({ image: data.image })
-    } catch (error) {
-      console.log(error, 'error')
+      this.setState({ price: room.price })
+      this.setState({ image: room.image })
+      this.setState({ gender: room.gender })
+
+      this.setState({ image: room.image })
+      this.setState({ roomsDetails: building.Rooms })
+      console.log(this.state)
+    } catch (err) {
+      console.log(err.message, 'error')
     }
   }
 
@@ -69,25 +79,38 @@ export default class ClientVR extends React.Component {
     this.setState({ count: this.state.count + 1 });
   };
 
-  hide = () => {
+  hideDetails = () => {
     this.setState({ title: !this.state.title })
   }
 
-  back() {
-    console.log('close')
+  next = () => {
+    this.setState({ current: this.state.current === this.state.rooms.length - 1 ? 0 : this.state.current + 1 })
+    this.setState({ currentImage: this.state.rooms[this.state.current] })
+  }
+
+  back = () => {
+    this.setState({ current: this.state.current === 0 ? this.state.rooms.length - 1 : this.state.current - 1 })
+    this.setState({ currentImage: this.state.rooms[this.state.current] })
   }
 
   componentDidMount() {
-    // this.fetchData()
+    this.fetchData()
     this.setState({ isLoading: false })
     Environment.setBackgroundImage(
       { uri: `https://cors-anywhere.herokuapp.com/${this.state.img}` }
     )
-    console.log('successfully feching data from server')
   }
 
-  changeBG(uri) {
-    Environment.setBackgroundImage({ uri: `https://cors-anywhere.herokuapp.com/${uri}` })
+  changeBG = (obj) => {
+    let keys = Object.keys(obj);
+    let filtered = keys.filter(key => obj[key] === true)
+    console.log('ini', filtered)
+    this.setState({ facilities: filtered })
+    this.setState({ price: obj.price })
+    this.setState({ image: obj.image })
+    this.setState({ gender: obj.gender })
+    console.log(this.state)
+    Environment.setBackgroundImage({ uri: `https://cors-anywhere.herokuapp.com/${obj.image}` })
   }
 
   showOtherRooms = () => {
@@ -101,13 +124,13 @@ export default class ClientVR extends React.Component {
           <View style={styles.greetingBox}>
             <Text style={styles.greeting}>
               please wait, we are preparing your room for you
-          </Text>
+           </Text>
           </View>
         </View>}
         {!this.state.isLoading && <View>
           <VrButton
             style={styles.button}
-            onClick={this.hide}>
+            onClick={this.hideDetails}>
             <Text>
               Details
             </Text>
@@ -116,6 +139,7 @@ export default class ClientVR extends React.Component {
             <View style={styles.greetingBox}>
               <Text style={styles.details}>{`facilities: \n-` + this.state.facilities.join('\n -')}</Text>
               <Text style={styles.details}>Price: {formatter.format(this.state.price)}</Text>
+              <Text style={styles.details}>Suitable for {this.state.gender}</Text>
               <Text style={styles.details}>{this.state.address}</Text>
             </View>}
           <VrButton
@@ -125,21 +149,22 @@ export default class ClientVR extends React.Component {
               Show Other Rooms
             </Text>
           </VrButton>
-          {this.state.listsRoom && 
-          <View>
-            {this.state.rooms.map((el, index) =>
-              <VrButton key={index} onClick={() => this.changeBG(el)}>
-                <Image source={{ uri: `https://cors-anywhere.herokuapp.com/${el}` }} style={{ width: 200, height: 100 }} />
+          {this.state.listsRoom &&
+            <View style={{ display: 'flex', flexDirection: 'row' }}>
+              <VrButton
+                style={styles.arrow}
+                onClick={this.back}>
+                <Image source={asset('back.png')} style={{ width: 50, height: 50 }} />
               </VrButton>
-            )}
-          </View>} 
-          <VrButton
-            style={styles.book, { backgroundColor: 'red' }}
-            onClick={this.back}>
-            <Text>
-              close
-            </Text>
-          </VrButton>
+              <VrButton onClick={() => this.changeBG(this.state.roomsDetails[this.state.current])}>
+                <Image source={{ uri: `https://cors-anywhere.herokuapp.com/${this.state.currentImage}` }} style={{ width: 200, height: 100 }} />
+              </VrButton>
+              <VrButton
+                style={styles.arrow}
+                onClick={this.next}>
+                <Image source={asset('next.png')} style={{ width: 50, height: 50 }} />
+              </VrButton>
+            </View>}
         </View>
         }
       </View>
@@ -191,6 +216,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'green',
     borderRadius: 5,
     borderColor: 'white',
+  },
+  arrow: {
+    padding: 20,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   details: {
     padding: 20,
