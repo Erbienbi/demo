@@ -9,16 +9,11 @@ import appAxios from './config/appAxios';
 
 // Pages //
 import Home from './pages/Home';
-// import UserLogin from './pages/UserLogin';
-// import UserRegister from './pages/UserRegister';
 import Profile from './pages/Profile';
-// import OwnerLogin from './pages/OwnerLogin';
-// import OwnerRegister from './pages/OwnerRegister';
 import BuildingList from './pages/BuildingList';
 import BuildingDetail from './pages/BuildingDetail';
 import AddBuilding from './pages/AddBuilding';
 import AddRoom from './pages/AddRoom';
-// import RoomList from './pages/RoomList';
 import RoomDetail from './pages/RoomDetail';
 
 // TESTING COMPONENT
